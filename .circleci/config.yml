@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  orb-tools: circleci/orb-tools@8.27.4
+# TODO restore import of alpha orb after first publish
+#  circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:alpha
+
+jobs:
+
+workflows:
+  lint_pack-validate_publish-dev:
+    jobs:
+      # this `lint-pack_validate_publish-dev` workflow will run on any commit
+      - orb-tools/lint
+
+      # pack your orb YAML files to a single orb.yml
+      # validate the orb.yml file to ensure it is well-formed
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+
+      # release dev version of orb, for testing & possible publishing
+      # requires a CircleCI API token to be stored as CIRCLE_TOKEN (default)
+      # https://circleci.com/docs/2.0/managing-api-tokens
+      # store CIRCLE_TOKEN as a project env var or Contexts resource
+      # if using Contexts, add your context below
+      - orb-tools/publish-dev:
+          orb-name: sonatype-nexus-community/circleci-nancy-orb
+          requires:
+            - orb-tools/pack
+
+      # integration tests
+      # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
+      # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
+      # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
+# TODO restore call of alpha orb after first publish
+#      - circleci-nancy-orb/run-nancy:
+#          requires:
+#            - orb-tools/publish-dev
+
+  promote-patch:
+    jobs:
+      - orb-tools/publish:
+          orb-path: src/orb.yml
+          orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
+          publish-token-variable: "CIRCLE_TOKEN"
+          validate: true
+
+      - approve-release:
+          type: approval
+          requires:
+            - orb-tools/publish
+
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-patch
+          orb-name: sonatype-nexus-community/circleci-nancy-orb
+          ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
+          requires:
+            - approve-release

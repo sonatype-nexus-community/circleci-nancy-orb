@@ -1,0 +1,46 @@
+version: 2.1
+description: |
+  Use nancy (https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
+
+examples:
+  run-nancy-example:
+    description: The configuration below will run nancy on your golang project dependencies.
+    usage:
+      version: 2.1
+
+      orbs:
+        circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+
+      workflows:
+        main:
+          jobs:
+            - circleci-nancy-orb/run-nancy
+
+executors:
+  golang-executor:
+    description: "CircleCI provided docker image with Golang installed. see: https://hub.docker.com/r/circleci/golang/"
+    docker:
+      - image: circleci/golang:1.12
+
+nancy-defaults: &JOB_NANCY_DEFAULTS
+  parameters:
+    executor:
+      type: executor
+      default: golang-executor
+    nancy-version:
+      type: string
+      default: v0.0.17
+    nancy-platform:
+      type: string
+      default: linux.amd64
+
+commands:
+  install-nancy:
+
+  run-nancy:
+
+jobs:
+  job-install-nancy:
+    <<: *JOB_NANCY_DEFAULTS
+    steps:
+      - install-nancy:
