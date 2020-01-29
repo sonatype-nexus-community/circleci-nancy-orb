@@ -52,11 +52,15 @@ commands:
             ls -alh /tmp/tools/
 
   run-nancy:
+    parameters:
+      modfile:
+        type: string
     steps:
       - run:
           name: Run Nancy
           command: |
             ls -alh /tmp/tools/
+            /tmp/tools/nancy << parameters.modfile >>
 
 jobs:
   job-install-nancy:
@@ -65,4 +69,5 @@ jobs:
       - install-nancy:
           nancy-version: << parameters.nancy-version >>
           nancy-platform: << parameters.nancy-platform >>
-      - run-nancy
+      - run-nancy:
+          modfile: test/non-vulnerable/go.sum
