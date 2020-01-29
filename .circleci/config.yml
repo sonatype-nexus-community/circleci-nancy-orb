@@ -1,10 +1,7 @@
 version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@8.27.4
-# TODO restore import of alpha orb after first publish
-#  circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:alpha
-
-jobs:
+  circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:alpha
 
 workflows:
   lint_pack-validate_publish-dev:
@@ -32,10 +29,9 @@ workflows:
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-# TODO restore call of alpha orb after first publish
-#      - circleci-nancy-orb/run-nancy:
-#          requires:
-#            - orb-tools/publish-dev
+      - circleci-nancy-orb/job-install-nancy:
+          requires:
+            - orb-tools/publish-dev
 
   promote-patch:
     jobs:
