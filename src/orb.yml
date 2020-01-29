@@ -33,14 +33,36 @@ nancy-defaults: &JOB_NANCY_DEFAULTS
     nancy-platform:
       type: string
       default: linux.amd64
+  executor: <<parameters.executor>>
 
 commands:
   install-nancy:
+    parameters:
+      nancy-version:
+        type: string
+      nancy-platform:
+        type: string
+    steps:
+      - run:
+          name: Install Nancy
+          command: |
+            cd /tmp && mkdir tools && cd -
+            apt-get update && apt install -y curl
+            curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-linux.amd64-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
+            chmod +x /tmp/tools/nancy
 
   run-nancy:
+    steps:
+      - run:
+          name: Run Nancy
+          command: |
+            /tmp/tools/Nancy --help
 
 jobs:
   job-install-nancy:
     <<: *JOB_NANCY_DEFAULTS
     steps:
       - install-nancy:
+          nancy-version: << parameters.nancy-version >>
+          nancy-platform: << parameters.nancy-platform >>
+      - run-nancy
