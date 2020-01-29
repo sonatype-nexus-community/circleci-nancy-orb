@@ -29,10 +29,10 @@ workflows:
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-      - circleci-nancy-orb/job-install-nancy:
-          nancy-version: v0.0.17
-          requires:
-            - orb-tools/publish-dev
+#      - circleci-nancy-orb/job-install-nancy:
+#          nancy-version: v0.0.17
+#          requires:
+#            - orb-tools/publish-dev
 
   promote-patch:
     jobs:
