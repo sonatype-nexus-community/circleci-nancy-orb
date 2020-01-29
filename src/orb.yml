@@ -57,7 +57,7 @@ commands:
           name: Run Nancy
           command: |
             ls -alh /tmp/tools/
-            /tmp/tools/Nancy --help
+            /tmp/tools/nancy --help
 
 jobs:
   job-install-nancy:
