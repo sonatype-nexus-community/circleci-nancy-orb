@@ -65,4 +65,4 @@ jobs:
       - install-nancy:
           nancy-version: << parameters.nancy-version >>
           nancy-platform: << parameters.nancy-platform >>
-      - run-nancy:
+      - run-nancy
