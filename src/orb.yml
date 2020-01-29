@@ -47,9 +47,10 @@ commands:
           name: Install Nancy
           command: |
             cd /tmp && mkdir tools && cd -
-            apt-get update && apt install -y curl
+            #apt-get update && apt install -y curl
             curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-linux.amd64-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
             chmod +x /tmp/tools/nancy
+            /tmp/tools/nancy --help
 
   run-nancy:
     steps:
@@ -65,4 +66,6 @@ jobs:
       - install-nancy:
           nancy-version: << parameters.nancy-version >>
           nancy-platform: << parameters.nancy-platform >>
-      - run-nancy
+      - run-nancy:
+          requires:
+            - install-nancy
