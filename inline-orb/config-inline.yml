@@ -9,7 +9,8 @@ orbs:
 
     examples:
       run-nancy-example:
-        description: The configuration below will run nancy on your golang project dependencies.
+        description: The configuration below will run nancy on your golang project dependencies. It assumes a default
+          architecture of linux.amd, nancy version v0.0.41, and a 'go.sum' file in the root of your project.
         usage:
           version: 2.1
 
@@ -20,6 +21,24 @@ orbs:
             main:
               jobs:
                 - circleci-nancy-orb/run-nancy
+
+      run-nancy-specific-version-platform-modfile-example:
+        description: The configuration below will run nancy on your golang project dependencies. It specifies custom
+          architecture (windows), nancy version (v0.0.40), and 'my-go.sum' file module file.
+        usage:
+          version: 2.1
+
+          orbs:
+            circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+
+          workflows:
+            main:
+              jobs:
+                - circleci-nancy-orb/run-nancy:
+                    nancy-platform: windows.amd64
+                    nancy-version: v0.0.40
+                    modfile: my-go.sum
+
 
     executors:
       golang-executor:
