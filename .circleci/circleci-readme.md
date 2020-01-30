@@ -11,7 +11,7 @@ The local build runs in a docker container.
 
   * Run a local build with the following command:
           
-        circleci local execute -c .circleci/local-config.yml --job 'orb-tools/lint'
+        circleci local execute -c .circleci/local-config.yml --job 'circleci-nancy-orb/job-run-nancy-2'
 
     With the above command, operations that cannot occur during a local build will show an error like this:
      

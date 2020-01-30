@@ -29,7 +29,7 @@ nancy-defaults: &JOB_NANCY_DEFAULTS
       default: golang-executor
     nancy-version:
       type: string
-      default: v0.0.17
+      default: v0.0.41
     nancy-platform:
       type: string
       default: linux.amd64
@@ -61,10 +61,6 @@ commands:
       - run:
           name: Run Nancy
           command: |
-            echo "Using modfile: << parameters.modfile >>"
-            pwd
-            ls -alh
-            ls -alh << parameters.modfile >>
             /tmp/tools/nancy << parameters.modfile >>
 
 jobs:

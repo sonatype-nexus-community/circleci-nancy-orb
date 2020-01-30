@@ -32,10 +32,18 @@ workflows:
       - circleci-nancy-orb/job-run-nancy:
           pre-steps:
             - checkout
+          # older nancy version
           nancy-version: v0.0.17
           modfile: test/non-vulnerable/go.sum
           requires:
             - orb-tools/publish-dev
+      - circleci-nancy-orb/job-run-nancy:
+          pre-steps:
+            - checkout
+          # default nancy version
+          modfile: test/non-vulnerable/go.sum
+          requires:
+            - circleci-nancy-orb/job-run-nancy
 
   promote-patch:
     jobs:

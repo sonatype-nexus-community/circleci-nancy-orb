@@ -34,7 +34,7 @@ orbs:
           default: golang-executor
         nancy-version:
           type: string
-          default: v0.0.17
+          default: v0.0.41
         nancy-platform:
           type: string
           default: linux.amd64
@@ -94,7 +94,7 @@ jobs:
     steps:
       - checkout
       - my-inline-orb/install-nancy:
-          nancy-version: v0.0.17
+          nancy-version: v0.0.41
           nancy-platform: linux.amd
       - my-inline-orb/run-nancy:
           modfile: test/non-vulnerable/go.sum
