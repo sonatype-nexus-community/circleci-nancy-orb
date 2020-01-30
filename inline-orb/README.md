@@ -35,7 +35,7 @@ I'm totally open to better solutions, so please reach out with ideas!
 
 1. When you feel good and saucy about your new inline-orb changes, you can extract that orb using the commands below:
 
-       circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'job-extract-orb' 
+       circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'job-extract-inline-orb' 
 
    If the local build completes successfully, you should see a happy yellow `Success!` message at the end.
 
