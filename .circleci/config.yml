@@ -30,6 +30,8 @@ workflows:
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
       - circleci-nancy-orb/job-run-nancy:
+          pre-steps:
+            - checkout
           nancy-version: v0.0.17
           modfile: test/non-vulnerable/go.sum
           requires:
