@@ -38,6 +38,9 @@ orbs:
         nancy-platform:
           type: string
           default: linux.amd64
+        modfile:
+          type: string
+          default: go.sum
       executor: <<parameters.executor>>
 
     commands:
@@ -54,7 +57,6 @@ orbs:
                 cd /tmp && mkdir tools && cd -
                 curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-linux.amd64-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
                 chmod +x /tmp/tools/nancy
-                ls -alh /tmp/tools/
 
       run-nancy:
         parameters:
@@ -64,22 +66,21 @@ orbs:
           - run:
               name: Run Nancy
               command: |
-                ls -alh /tmp/tools/
                 /tmp/tools/nancy << parameters.modfile >>
 
     jobs:
-      job-install-nancy:
+      job-run-nancy:
         <<: *JOB_NANCY_DEFAULTS
         steps:
           - install-nancy:
               nancy-version: << parameters.nancy-version >>
               nancy-platform: << parameters.nancy-platform >>
           - run-nancy:
-              modfile: test/non-vulnerable/go.sum
+              modfile: << parameters.modfile >>
 
 
 jobs:
-  job-extract-orb:
+  job-extract-inline-orb:
     docker:
       - image: circleci/ruby
     steps:
@@ -88,10 +89,19 @@ jobs:
           orb: my-inline-orb
           source: inline-orb/config-inline.yml
 
+  job-test-inline-orb:
+    executor: my-inline-orb/golang-executor
+    steps:
+      - checkout
+      - my-inline-orb/install-nancy:
+          nancy-version: v0.0.17
+          nancy-platform: linux.amd
+      - my-inline-orb/run-nancy:
+          modfile: test/non-vulnerable/go.sum
+
 workflows:
+  # NOTE: Workflows below are not used for local inline development, and exist only as required for local config processing.
   main:
     jobs:
-      # test the inline orb here
-      - my-inline-orb/job-install-nancy
-#      #- check-results-job
-      - job-extract-orb
+      - job-test-inline-orb
+      - job-extract-inline-orb

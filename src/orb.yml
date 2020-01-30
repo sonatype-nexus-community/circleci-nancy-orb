@@ -33,6 +33,9 @@ nancy-defaults: &JOB_NANCY_DEFAULTS
     nancy-platform:
       type: string
       default: linux.amd64
+    modfile:
+      type: string
+      default: go.sum
   executor: <<parameters.executor>>
 
 commands:
@@ -49,7 +52,6 @@ commands:
             cd /tmp && mkdir tools && cd -
             curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-linux.amd64-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
             chmod +x /tmp/tools/nancy
-            ls -alh /tmp/tools/
 
   run-nancy:
     parameters:
@@ -59,15 +61,18 @@ commands:
       - run:
           name: Run Nancy
           command: |
-            ls -alh /tmp/tools/
+            echo "Using modfile: << parameters.modfile >>"
+            pwd
+            ls -alh
+            ls -alh << parameters.modfile >>
             /tmp/tools/nancy << parameters.modfile >>
 
 jobs:
-  job-install-nancy:
+  job-run-nancy:
     <<: *JOB_NANCY_DEFAULTS
     steps:
       - install-nancy:
           nancy-version: << parameters.nancy-version >>
           nancy-platform: << parameters.nancy-platform >>
       - run-nancy:
-          modfile: test/non-vulnerable/go.sum
+          modfile: << parameters.modfile >>

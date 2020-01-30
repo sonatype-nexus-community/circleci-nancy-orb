@@ -27,15 +27,19 @@ I'm totally open to better solutions, so please reach out with ideas!
 1. Edit the inline-orb (my-inline-orb) contained in the file: [config-inline.yml](inline-orb/config-inline.yml)
 1. Process the inline config into a locally executable config, and run a local CircleCI build via the command below:
 
-       circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'my-inline-orb/job-install-nancy' 
+       circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'job-test-inline-orb' 
 
-   The last argument specifies which 'job' to run in the generated file: inline-orb/local-config-inline.yml.
+   The last argument specifies which 'job' to run from the generated file: `inline-orb/local-config-inline.yml`.
+   
+   If the local build completes successfully, you should see a happy yellow `Success!` message at the end.
 
 1. When you feel good and saucy about your new inline-orb changes, you can extract that orb using the commands below:
 
        circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'job-extract-orb' 
 
+   If the local build completes successfully, you should see a happy yellow `Success!` message at the end.
+
    You can then copy the output (from after the first `version 2.1` snippet, to before the last `jobs` snippet)
    onto your [real orb](src/orb.yml).
    
-   Wash, rinse, repeat.
+Wash, rinse, repeat.
