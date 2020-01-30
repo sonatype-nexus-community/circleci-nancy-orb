@@ -46,15 +46,6 @@ nancy-defaults: &JOB_NANCY_DEFAULTS
     executor:
       type: executor
       default: golang-executor
-    nancy-version:
-      type: string
-      default: v0.0.41
-    nancy-platform:
-      type: string
-      default: linux.amd64
-    modfile:
-      type: string
-      default: go.sum
   executor: <<parameters.executor>>
 
 commands:
@@ -62,8 +53,10 @@ commands:
     parameters:
       nancy-version:
         type: string
+        default: v0.0.41
       nancy-platform:
         type: string
+        default: linux.amd64
     steps:
       - run:
           name: Install Nancy
@@ -76,6 +69,7 @@ commands:
     parameters:
       modfile:
         type: string
+        default: go.sum
     steps:
       - run:
           name: Run Nancy
@@ -86,8 +80,5 @@ jobs:
   job-run-nancy:
     <<: *JOB_NANCY_DEFAULTS
     steps:
-      - install-nancy:
-          nancy-version: << parameters.nancy-version >>
-          nancy-platform: << parameters.nancy-platform >>
-      - run-nancy:
-          modfile: << parameters.modfile >>
+      - install-nancy
+      - run-nancy

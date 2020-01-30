@@ -51,15 +51,6 @@ orbs:
         executor:
           type: executor
           default: golang-executor
-        nancy-version:
-          type: string
-          default: v0.0.41
-        nancy-platform:
-          type: string
-          default: linux.amd64
-        modfile:
-          type: string
-          default: go.sum
       executor: <<parameters.executor>>
 
     commands:
@@ -67,8 +58,10 @@ orbs:
         parameters:
           nancy-version:
             type: string
+            default: v0.0.41
           nancy-platform:
             type: string
+            default: linux.amd64
         steps:
           - run:
               name: Install Nancy
@@ -81,6 +74,7 @@ orbs:
         parameters:
           modfile:
             type: string
+            default: go.sum
         steps:
           - run:
               name: Run Nancy
@@ -91,11 +85,8 @@ orbs:
       job-run-nancy:
         <<: *JOB_NANCY_DEFAULTS
         steps:
-          - install-nancy:
-              nancy-version: << parameters.nancy-version >>
-              nancy-platform: << parameters.nancy-platform >>
-          - run-nancy:
-              modfile: << parameters.modfile >>
+          - install-nancy
+          - run-nancy
 
 
 jobs:
@@ -112,9 +103,7 @@ jobs:
     executor: my-inline-orb/golang-executor
     steps:
       - checkout
-      - my-inline-orb/install-nancy:
-          nancy-version: v0.0.41
-          nancy-platform: linux.amd
+      - my-inline-orb/install-nancy
       - my-inline-orb/run-nancy:
           modfile: test/non-vulnerable/go.sum
 
