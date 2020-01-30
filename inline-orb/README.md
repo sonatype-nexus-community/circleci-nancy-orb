@@ -1,6 +1,6 @@
 # test-circleci-nancy-orb
 
-The existence of this project is evidence of "room for improvement" in the Orb development process,
+The existence of this sub-folder README.md is evidence of "room for improvement" in the Orb development process,
 and/or my ignorance of a "better way" to do it. 
 
 If you use a "real" orb (not-inline, but rather imported via the `orbs` section of
@@ -24,7 +24,7 @@ I'm totally open to better solutions, so please reach out with ideas!
 
 ### Development Process
 
-1. Edit the inline-orb (my-inline-orb) contained in the file: [config-inline.yml](inline-orb/config-inline.yml)
+1. Edit the inline-orb (my-inline-orb) contained in the file: [config-inline.yml](config-inline.yml)
 1. Process the inline config into a locally executable config, and run a local CircleCI build via the command below:
 
        circleci config process inline-orb/config-inline.yml > inline-orb/local-config-inline.yml && circleci local execute -c inline-orb/local-config-inline.yml --job 'job-test-inline-orb' 
@@ -40,6 +40,6 @@ I'm totally open to better solutions, so please reach out with ideas!
    If the local build completes successfully, you should see a happy yellow `Success!` message at the end.
 
    You can then copy the output (from after the first `version 2.1` snippet, to before the last `jobs` snippet)
-   onto your [real orb](src/orb.yml).
+   onto your [real orb](../src/orb.yml).
    
 Wash, rinse, repeat.
