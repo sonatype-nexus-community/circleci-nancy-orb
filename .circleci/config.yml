@@ -76,7 +76,6 @@ jobs:
   job-test-run-options:
     executor: circleci-nancy-orb/golang-executor
     steps:
-      - checkout
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy:
           options: -quiet
@@ -84,10 +83,9 @@ jobs:
   job-test-run-modfile-options:
     executor: circleci-nancy-orb/golang-executor
     steps:
-      - checkout
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
-          options: -quiet
+          options: -version
 
 workflows:
   lint_pack-validate_publish-dev:
