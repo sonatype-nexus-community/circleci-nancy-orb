@@ -99,12 +99,12 @@ workflows:
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-      - job-test-install-default-nancy
-      - job-test-install-old-nancy
-      - job-test-install-platform-windows
-      - job-test-install-platform-macos
-      - job-test-run-modfile
-      - job-test-run-default
+#      - job-test-install-default-nancy
+#      - job-test-install-old-nancy
+#      - job-test-install-platform-windows
+#      - job-test-install-platform-macos
+#      - job-test-run-modfile
+#      - job-test-run-default
 
   promote-patch:
     jobs:
