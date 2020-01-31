@@ -44,7 +44,7 @@ examples:
       workflows:
         main:
           jobs:
-            - circleci-nancy-orb/run-nancy:
+            - circleci-nancy-orb/run-nancy-modfile:
                 nancy-platform: windows.amd64
                 nancy-version: v0.0.40
                 modfile: my-go.sum
