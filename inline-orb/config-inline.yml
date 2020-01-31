@@ -105,11 +105,17 @@ orbs:
             default: go list -m all
             description: >
               The go list command who's output will be piped to Nancy to read your project dependencies.
+          options:
+            type: string
+            default: ""
+            description: >
+              Additional options to pass to nancy. Like: -quiet -exclude-vulnerability value
+              See https://github.com/sonatype-nexus-community/nancy#usage for all valid options.
         steps:
           - run:
               name: Run Nancy
               command: |
-                << parameters.golistcommand >> | /tmp/tools/nancy
+                << parameters.golistcommand >> | /tmp/tools/nancy << parameters.options >>
 
       run-nancy-modfile:
         parameters:
@@ -119,11 +125,17 @@ orbs:
             description: >
               The path to the file from which Nancy will read your project dependencies.
               Typically the path to a file named `go.sum` or `Gopkg.lock`.
+          options:
+            type: string
+            default: ""
+            description: >
+              Additional options to pass to nancy. Like: -quiet -exclude-vulnerability value
+              See https://github.com/sonatype-nexus-community/nancy#usage for all valid options.
         steps:
           - run:
               name: Run Nancy modfile
               command: |
-                /tmp/tools/nancy << parameters.modfile >>
+                /tmp/tools/nancy << parameters.options >> << parameters.modfile >>
 
     jobs:
       job-run-nancy:
@@ -150,6 +162,7 @@ jobs:
       - my-inline-orb/install-nancy
       - my-inline-orb/run-nancy
       - my-inline-orb/run-nancy-modfile:
+          options: -quiet
           modfile: test/non-vulnerable/go.sum
 
 workflows:
