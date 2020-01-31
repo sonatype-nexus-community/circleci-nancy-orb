@@ -58,13 +58,20 @@ jobs:
           nancy-platform: darwin.amd64
       - remove-nancy
 
-  job-test-run-default-nancy:
+  job-test-run-modfile:
     executor: circleci-nancy-orb/golang-executor
     steps:
       - checkout
       - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy:
+      - circleci-nancy-orb/run-nancy-modfile:
           modfile: test/non-vulnerable/go.sum
+
+  job-test-run-default:
+    executor: circleci-nancy-orb/golang-executor
+    steps:
+      - checkout
+      - circleci-nancy-orb/install-nancy
+      - circleci-nancy-orb/run-nancy
 
 workflows:
   lint_pack-validate_publish-dev:
@@ -96,7 +103,8 @@ workflows:
       - job-test-install-old-nancy
       - job-test-install-platform-windows
       - job-test-install-platform-macos
-      - job-test-run-default-nancy
+      - job-test-run-modfile
+      - job-test-run-default
 
   promote-patch:
     jobs:

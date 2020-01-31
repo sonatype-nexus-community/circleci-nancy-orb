@@ -8,7 +8,22 @@ orbs:
       Use nancy (https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
 
     examples:
-      run-nancy-example:
+      run-nancy-golist-example:
+        description: The configuration below will run nancy on your golang project dependencies.
+          The default go list command will be used to pipe dependency information to nancy.
+          It assumes a default architecture of linux.amd, nancy version v0.0.41.
+        usage:
+          version: 2.1
+
+          orbs:
+            circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+
+          workflows:
+            main:
+              jobs:
+                - circleci-nancy-orb/run-nancy
+
+      run-nancy-gosum-example:
         description: The configuration below will run nancy on your golang project dependencies. It assumes a default
           architecture of linux.amd, nancy version v0.0.41, and a 'go.sum' file in the root of your project.
         usage:
@@ -20,7 +35,7 @@ orbs:
           workflows:
             main:
               jobs:
-                - circleci-nancy-orb/run-nancy
+                - circleci-nancy-orb/run-nancy-modfile
 
       run-nancy-specific-version-platform-modfile-example:
         description: The configuration below will run nancy on your golang project dependencies. It specifies custom
@@ -45,6 +60,8 @@ orbs:
         description: "CircleCI provided docker image with Golang installed. see: https://hub.docker.com/r/circleci/golang/"
         docker:
           - image: circleci/golang:1.12
+            environment:
+              - GO111MODULE=on
 
     nancy-defaults: &JOB_NANCY_DEFAULTS
       parameters:
@@ -83,6 +100,19 @@ orbs:
 
       run-nancy:
         parameters:
+          golistcommand:
+            type: string
+            default: go list -m all
+            description: >
+              The go list command who's output will be piped to Nancy to read your project dependencies.
+        steps:
+          - run:
+              name: Run Nancy
+              command: |
+                << parameters.golistcommand >> | /tmp/tools/nancy
+
+      run-nancy-modfile:
+        parameters:
           modfile:
             type: string
             default: go.sum
@@ -91,7 +121,7 @@ orbs:
               Typically the path to a file named `go.sum` or `Gopkg.lock`.
         steps:
           - run:
-              name: Run Nancy
+              name: Run Nancy modfile
               command: |
                 /tmp/tools/nancy << parameters.modfile >>
 
@@ -118,7 +148,8 @@ jobs:
     steps:
       - checkout
       - my-inline-orb/install-nancy
-      - my-inline-orb/run-nancy:
+      - my-inline-orb/run-nancy
+      - my-inline-orb/run-nancy-modfile:
           modfile: test/non-vulnerable/go.sum
 
 workflows:
