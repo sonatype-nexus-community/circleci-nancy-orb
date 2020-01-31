@@ -1,6 +1,7 @@
 version: 2.1
 description: |
   Use nancy (https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
+  Source code available here: https://github.com/sonatype-nexus-community/circleci-nancy-orb
 
 examples:
   run-nancy-golist-example:
@@ -13,10 +14,17 @@ examples:
       orbs:
         circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
 
+      jobs:
+        job-nancy:
+          executor: circleci-nancy-orb/golang-executor
+          steps:
+            - circleci-nancy-orb/install-nancy
+            - circleci-nancy-orb/run-nancy
+
       workflows:
         main:
           jobs:
-            - circleci-nancy-orb/run-nancy
+            - job-nancy
 
   run-nancy-gosum-example:
     description: The configuration below will run nancy on your golang project dependencies. It assumes a default
@@ -27,27 +35,43 @@ examples:
       orbs:
         circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
 
+      jobs:
+        job-nancy:
+          executor: circleci-nancy-orb/golang-executor
+          steps:
+            - circleci-nancy-orb/install-nancy
+            - circleci-nancy-orb/run-nancy-modfile
+
       workflows:
         main:
           jobs:
-            - circleci-nancy-orb/run-nancy-modfile
+            - job-nancy
 
   run-nancy-specific-version-platform-modfile-example:
     description: The configuration below will run nancy on your golang project dependencies. It specifies custom
-      architecture (windows), nancy version (v0.0.40), and 'my-go.sum' file module file.
+      architecture (windows), nancy version (v0.0.40), and 'my-go.sum' file module file. It runs nancy with the
+      -quiet option.
     usage:
       version: 2.1
 
       orbs:
         circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
 
+      jobs:
+        job-nancy:
+          executor: circleci-nancy-orb/golang-executor
+          steps:
+            - circleci-nancy-orb/install-nancy:
+                nancy-platform: windows.amd64
+                nancy-version: v0.0.40
+            - circleci-nancy-orb/run-nancy-modfile:
+                modfile: my-go.sum
+                option: -quiet
+
       workflows:
         main:
           jobs:
-            - circleci-nancy-orb/run-nancy-modfile:
-                nancy-platform: windows.amd64
-                nancy-version: v0.0.40
-                modfile: my-go.sum
+            - job-nancy
 
 
 executors:
@@ -132,9 +156,3 @@ commands:
           command: |
             /tmp/tools/nancy << parameters.options >> << parameters.modfile >>
 
-jobs:
-  job-run-nancy:
-    <<: *JOB_NANCY_DEFAULTS
-    steps:
-      - install-nancy
-      - run-nancy

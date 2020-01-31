@@ -39,7 +39,7 @@ I'm totally open to better solutions, so please reach out with ideas!
 
    If the local build completes successfully, you should see a happy yellow `Success!` message at the end.
 
-   You can then copy the output (from after the first `version 2.1` snippet, to before the last `jobs` snippet)
+   You can then copy the output (from after the first `version 2.1` snippet, to before the last `jobs:` snippet)
    onto your [real orb](../src/orb.yml).
    
    The following script will execute both commands above, and will error out if something fails.
