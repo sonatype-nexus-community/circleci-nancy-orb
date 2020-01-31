@@ -5,8 +5,8 @@ orbs:
   my-inline-orb:
     version: 2.1
     description: |
-      Use nancy (https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
-      Source code available here: https://github.com/sonatype-nexus-community/circleci-nancy-orb
+      Use Nancy to check for vulnerabilities in your Golang dependencies.
+      Full orb source code: https://github.com/sonatype-nexus-community/circleci-nancy-orb
 
     examples:
       run-nancy-golist-example:
