@@ -59,15 +59,22 @@ orbs:
           nancy-version:
             type: string
             default: v0.0.41
+            description: >
+              The version of Nancy to run. See: https://github.com/sonatype-nexus-community/nancy/releases for available
+              versions.
           nancy-platform:
             type: string
             default: linux.amd64
+            description: >
+              The underlying OS on which Nancy will run. Valid values are: linux.amd64, darwin.amd64, windows.amd64.
+              See: https://github.com/sonatype-nexus-community/nancy/releases for all available platforms.
+              Please let us know if you find a need for another platform, or even better, submit a PR!
         steps:
           - run:
               name: Install Nancy
               command: |
                 cd /tmp && mkdir tools && cd -
-                curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-linux.amd64-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
+                curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-platform >>-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
                 chmod +x /tmp/tools/nancy
 
       run-nancy:
@@ -75,6 +82,9 @@ orbs:
           modfile:
             type: string
             default: go.sum
+            description: >
+              The path to the file from which Nancy will read you dependencies.
+              Typically the path to a file named `go.sum` or `Gopkg.lock`.
         steps:
           - run:
               name: Run Nancy
