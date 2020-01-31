@@ -121,8 +121,8 @@ workflows:
       - job-test-install-platform-macos
       - job-test-run-modfile
       - job-test-run-default
-      - job-test-run-options
-      - job-test-run-modfile-options
+#      - job-test-run-options
+#      - job-test-run-modfile-options
 
   promote-patch:
     jobs:
