@@ -69,7 +69,7 @@ commands:
           name: Install Nancy
           command: |
             cd /tmp && mkdir tools && cd -
-            curl -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-platform >>-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
+            curl --fail -s -L "https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-platform >>-<< parameters.nancy-version >>" -o "/tmp/tools/nancy"
             chmod +x /tmp/tools/nancy
 
   run-nancy:
