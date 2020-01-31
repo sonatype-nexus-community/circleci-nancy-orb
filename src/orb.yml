@@ -82,13 +82,6 @@ executors:
         environment:
           - GO111MODULE=on
 
-nancy-defaults: &JOB_NANCY_DEFAULTS
-  parameters:
-    executor:
-      type: executor
-      default: golang-executor
-  executor: <<parameters.executor>>
-
 commands:
   install-nancy:
     parameters:
@@ -155,4 +148,3 @@ commands:
           name: Run Nancy modfile
           command: |
             /tmp/tools/nancy << parameters.options >> << parameters.modfile >>
-
