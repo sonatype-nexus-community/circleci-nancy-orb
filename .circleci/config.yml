@@ -14,13 +14,23 @@ commands:
             fi
 
 jobs:
-  job-test-old-nancy:
+  job-test-install-default-nancy:
     executor: circleci-nancy-orb/golang-executor
     steps:
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          key: my-orb-v1-{{ checksum ".circleci/config.yml" }}
+      - circleci-nancy-orb/install-nancy
+      - run:
+          name: Check install old nancy version
+          command: |
+            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
+            echo "installedNancyVersion: $installedNancyVersion"
+            if [ "$installedNancyVersion" != "v0.0.41" ]; then
+              >&2 echo "Wrong old nancy version output: $installedNancyVersion"
+              exit 1
+            fi
+
+  job-test-install-old-nancy:
+    executor: circleci-nancy-orb/golang-executor
+    steps:
       - remove-nancy
       - circleci-nancy-orb/install-nancy:
           nancy-version: v0.0.17
@@ -37,13 +47,24 @@ jobs:
   job-test-install-platform-windows:
     executor: circleci-nancy-orb/golang-executor
     steps:
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          key: my-orb-v1-{{ checksum ".circleci/config.yml" }}
       - circleci-nancy-orb/install-nancy:
           nancy-platform: windows.amd64
       - remove-nancy
+
+  job-test-install-platform-macos:
+    executor: circleci-nancy-orb/golang-executor
+    steps:
+      - circleci-nancy-orb/install-nancy:
+          nancy-platform: darwin.amd64
+      - remove-nancy
+
+  job-test-run-default-nancy:
+    executor: circleci-nancy-orb/golang-executor
+    steps:
+      - checkout
+      - circleci-nancy-orb/install-nancy
+      - circleci-nancy-orb/run-nancy:
+          modfile: test/non-vulnerable/go.sum
 
 workflows:
   lint_pack-validate_publish-dev:
@@ -71,8 +92,11 @@ workflows:
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-      - job-test-old-nancy
+      - job-test-install-default-nancy
+      - job-test-install-old-nancy
       - job-test-install-platform-windows
+      - job-test-install-platform-macos
+      - job-test-run-default-nancy
 
   promote-patch:
     jobs:
