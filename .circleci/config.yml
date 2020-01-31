@@ -3,6 +3,16 @@ orbs:
   orb-tools: circleci/orb-tools@8.27.4
   circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:alpha
 
+commands:
+  remove-nancy:
+    steps:
+      - run:
+          command: |
+            if [ -f "/tmp/tools/nancy" ]; then
+              rm /tmp/tools/nancy
+              echo "Removed nancy"
+            fi
+
 jobs:
   job-test-old-nancy:
     executor: circleci-nancy-orb/golang-executor
@@ -11,6 +21,7 @@ jobs:
           at: .
       - restore_cache:
           key: my-orb-v1-{{ checksum ".circleci/config.yml" }}
+      - remove-nancy
       - circleci-nancy-orb/install-nancy:
           nancy-version: v0.0.17
       - run:
@@ -23,7 +34,7 @@ jobs:
               exit 1
             fi
 
-  job-test-bad-plaform:
+  job-test-install-platform-windows:
     executor: circleci-nancy-orb/golang-executor
     steps:
       - attach_workspace:
@@ -31,16 +42,8 @@ jobs:
       - restore_cache:
           key: my-orb-v1-{{ checksum ".circleci/config.yml" }}
       - circleci-nancy-orb/install-nancy:
-          nancy-platform: bogus
-      - run:
-          name: Check install invalid nancy platform
-          command: |
-            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
-            echo "installedNancyVersion: $installedNancyVersion"
-            if [ "$installedNancyVersion" != "v0.0.17" ]; then
-              >&2 echo "Wrong old nancy version output: $installedNancyVersion"
-              exit 1
-            fi
+          nancy-platform: windows.amd64
+      - remove-nancy
 
 workflows:
   lint_pack-validate_publish-dev:
@@ -68,12 +71,8 @@ workflows:
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
       # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-      - job-test-old-nancy:
-          requires:
-            - orb-tools/publish-dev
-      - job-test-bad-plaform:
-          requires:
-            - job-test-old-nancy
+      - job-test-old-nancy
+      - job-test-install-platform-windows
 
   promote-patch:
     jobs:
