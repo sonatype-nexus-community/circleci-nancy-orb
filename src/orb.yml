@@ -82,7 +82,7 @@ commands:
         type: string
         default: go.sum
         description: >
-          The path to the file from which Nancy will read you dependencies.
+          The path to the file from which Nancy will read your project dependencies.
           Typically the path to a file named `go.sum` or `Gopkg.lock`.
     steps:
       - run:
