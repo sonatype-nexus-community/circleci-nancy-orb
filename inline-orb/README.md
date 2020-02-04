@@ -56,6 +56,6 @@ I'm totally open to better solutions, so please reach out with ideas!
    
    The following script will execute both commands above, and will error out if something fails.
    
-       inline-orb/runcircle-local-inline.sh
+   [inline-orb/runcircle-local-inline.sh](../inline-orb/runcircle-local-inline.sh)
    
 Wash, rinse, repeat.
