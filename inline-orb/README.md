@@ -29,7 +29,7 @@ you then export the inline orb using the command below. Then copy/paste the expo
 source onto the 'real' orb source (`src/orb.yml`). (Feel dirty yet? You should.) 
 
 Previously I created an entirely separate github project to house the inline-orb.
-In this project, I'm attempting to stash the inline-orb madness in the same project as the 
+Instead, now I'm attempting to stash the inline-orb madness in the same project as the 
 'real' orb. So it's getting better right?
 
 I'm totally open to better solutions, so please reach out with ideas!
