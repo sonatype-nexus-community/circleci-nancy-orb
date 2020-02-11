@@ -1,0 +1,7 @@
+version: 2.1
+description: |
+  Use Nancy to check for vulnerabilities in your Golang dependencies.
+
+display:
+  home_url: "https://github.com/sonatype-nexus-community/circleci-nancy-orb#circleci-nancy-orb"
+  source_url: "https://github.com/sonatype-nexus-community/circleci-nancy-orb"

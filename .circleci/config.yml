@@ -7,8 +7,19 @@
 #  Eclipse Foundation. All other trademarks are the property of their respective owners.
 version: 2.1
 orbs:
-  orb-tools: circleci/orb-tools@8.27.4
+  orb-tools: circleci/orb-tools@9.0
   circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:alpha
+
+# Pipeline parameters
+parameters:
+  # These pipeline parameters are required by the "trigger-integration-tests-workflow"
+  # job, by default.
+  run-integration-tests:
+    type: boolean
+    default: false
+  dev-orb-version:
+    type: string
+    default: "dev:alpha"
 
 commands:
   remove-nancy:
@@ -96,6 +107,7 @@ jobs:
 
 workflows:
   lint_pack-validate_publish-dev:
+    unless: << pipeline.parameters.run-integration-tests >>
     jobs:
       # this `lint-pack_validate_publish-dev` workflow will run on any commit
       - orb-tools/lint
@@ -116,6 +128,20 @@ workflows:
           requires:
             - orb-tools/pack
 
+      # trigger an integration workflow to test the
+      # dev:${CIRCLE_SHA1:0:7} version of your orb
+      - orb-tools/trigger-integration-tests-workflow:
+          name: trigger-integration-dev
+          requires:
+            - orb-tools/publish-dev
+
+  # This `integration-tests` workflow will only run
+  # when the run-integration-tests pipeline parameter is set to true.
+  # It is meant to be triggered by the "trigger-integration-tests-workflow"
+  # job, and run tests on <your orb>@dev:${CIRCLE_SHA1:0:7}.
+  integration-tests:
+    when: << pipeline.parameters.run-integration-tests >>
+    jobs:
       # integration tests
       # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
       # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
@@ -128,6 +154,18 @@ workflows:
       - job-test-run-default
       - job-test-run-options
       - job-test-run-modfile-options
+
+  # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
+  wf_integration-test:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              ignore: /.*/
+    jobs:
+      # change the line below to run the IT job of you choice
+      - job-test-run-default
 
   promote-patch:
     jobs:
@@ -142,9 +180,9 @@ workflows:
           requires:
             - orb-tools/publish
 
-      - orb-tools/dev-promote-prod:
-          name: dev-promote-patch
-          orb-name: sonatype-nexus-community/circleci-nancy-orb
-          ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
-          requires:
-            - approve-release
+#      - orb-tools/dev-promote-prod:
+#          name: dev-promote-patch
+#          orb-name: sonatype-nexus-community/circleci-nancy-orb
+#          ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
+#          requires:
+#            - approve-release
