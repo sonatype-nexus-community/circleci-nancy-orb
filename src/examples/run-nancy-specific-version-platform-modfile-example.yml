@@ -1,0 +1,24 @@
+description: The configuration below will run nancy on your golang project dependencies. It specifies custom
+  architecture (windows), nancy version (v0.0.40), and 'my-go.sum' file module file. It runs nancy with the
+  -quiet option.
+usage:
+  version: 2.1
+
+  orbs:
+    circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+
+  jobs:
+    job-nancy:
+      executor: circleci-nancy-orb/golang-executor
+      steps:
+        - circleci-nancy-orb/install-nancy:
+            nancy-platform: windows.amd64
+            nancy-version: v0.0.40
+        - circleci-nancy-orb/run-nancy-modfile:
+            modfile: my-go.sum
+            option: -quiet
+
+  workflows:
+    main:
+      jobs:
+        - job-nancy
