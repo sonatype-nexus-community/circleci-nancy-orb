@@ -37,3 +37,4 @@ Phew, that was easier than I thought. Last but not least of all:
 Looking to contribute to our code but need some help? There's a few ways to get information:
 
 * Create Issues in this github project.
+* See the `community: CircleCI Discuss` badge at the top of this page.
