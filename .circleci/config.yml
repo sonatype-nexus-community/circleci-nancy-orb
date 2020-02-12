@@ -177,16 +177,25 @@ workflows:
           requires:
             - orb-tools/pack
       - orb-tools/publish:
-          #orb-path: orb.yml
           attach-workspace: true
           orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
           requires:
             - orb-tools/publish-dev
 
       - approve-release:
+          filters:
+            branches:
+              only: master
           type: approval
           requires:
             - orb-tools/publish
+
+      - orb-tools/increment:
+          filters:
+            branches:
+              only: master
+          attach-workspace: true
+          orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
 
 #      - orb-tools/dev-promote-prod:
 #          name: dev-promote-patch
