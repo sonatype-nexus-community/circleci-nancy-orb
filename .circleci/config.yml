@@ -195,7 +195,7 @@ workflows:
             branches:
               only: master
           attach-workspace: true
-          orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
+          orb-ref: sonatype-nexus-community/circleci-nancy-orb
           requires:
             - approve-release
 
