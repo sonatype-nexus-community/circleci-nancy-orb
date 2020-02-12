@@ -172,11 +172,15 @@ workflows:
       - orb-tools/pack:
           requires:
             - orb-tools/lint
+      - orb-tools/publish-dev:
+          orb-name: sonatype-nexus-community/circleci-nancy-orb
+          requires:
+            - orb-tools/pack
       - orb-tools/publish:
           #orb-path: orb.yml
           orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
           requires:
-            - orb-tools/pack
+            - orb-tools/publish-dev
 
       - approve-release:
           type: approval
