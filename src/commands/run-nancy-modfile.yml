@@ -9,7 +9,7 @@ parameters:
     type: string
     default: ""
     description: >
-      Additional options to pass to nancy. Like: -quiet -exclude-vulnerability value
+      Additional options to pass to nancy, for example: -quiet -exclude-vulnerability some_vuln_to_exclude
       See https://github.com/sonatype-nexus-community/nancy#usage for all valid options.
 steps:
   - run:
