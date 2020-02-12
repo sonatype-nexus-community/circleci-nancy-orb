@@ -178,6 +178,7 @@ workflows:
             - orb-tools/pack
       - orb-tools/publish:
           #orb-path: orb.yml
+          attach-workspace: true
           orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
           requires:
             - orb-tools/publish-dev
