@@ -196,6 +196,8 @@ workflows:
               only: master
           attach-workspace: true
           orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
+          requires:
+            - approve-release
 
 #      - orb-tools/dev-promote-prod:
 #          name: dev-promote-patch
