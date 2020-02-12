@@ -10,18 +10,14 @@
 
 -->
 
-# circleci-nancy-orb
-
-[![CircleCI](https://circleci.com/gh/sonatype-nexus-community/circleci-nancy-orb.svg?style=svg)](https://circleci.com/gh/sonatype-nexus-community/circleci-nancy-orb)
+# circleci-nancy-orb [![CircleCI Build Status](https://circleci.com/gh/sonatype-nexus-community/circleci-nancy-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/sonatype-nexus-community/circleci-nancy-orb) [![CircleCI Orb Version](https://img.shields.io/badge/endpoint.svg?url=https://badges.circleci.io/orb/sonatype-nexus-community/circleci-nancy-orb)](https://circleci.com/orbs/registry/orb/sonatype-nexus-community/circleci-nancy-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nancy-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 Provides a CircleCI Orb to use [nancy](https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
 
-The Orb is available on the CircleCI Orb Registry here: [circleci-nancy-orb](https://circleci.com/orbs/registry/orb/sonatype-nexus-community/circleci-nancy-orb).
-
 ### Orb Development Process
 
-  I'm sure there are better ways, but for now, see this [inline-orb/README.md](inline-orb/README.md)
-  for notes on how to develop this orb. Improvements welcome!
+  This Orb was built following the format defined in the [Orb Starter Kit](https://github.com/CircleCI-Public/orb-starter-kit#orb-starter-kit--).
+  More details are available there.
 
 ## The Fine Print
 
@@ -41,3 +37,4 @@ Phew, that was easier than I thought. Last but not least of all:
 Looking to contribute to our code but need some help? There's a few ways to get information:
 
 * Create Issues in this github project.
+* See the `community: CircleCI Discuss` badge at the top of this page.
