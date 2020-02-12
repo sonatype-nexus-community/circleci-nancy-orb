@@ -169,11 +169,17 @@ workflows:
 
   promote-patch:
     jobs:
+      - orb-tools/lint
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
       - orb-tools/publish:
           #orb-path: src/orb.yml
           orb-ref: sonatype-nexus-community/circleci-nancy-orb@dev:${CIRCLE_BRANCH}
           publish-token-variable: "CIRCLE_TOKEN"
           validate: true
+          requires:
+            - orb-tools/pack
 
       - approve-release:
           type: approval
