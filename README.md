@@ -14,6 +14,8 @@
 
 Provides a CircleCI Orb to use [nancy](https://github.com/sonatype-nexus-community/nancy) to check for vulnerabilities in your Golang dependencies.
 
+Click the `orb version` badge above for usage examples and documentation.
+ 
 ### Orb Development Process
 
   This Orb was built following the format defined in the [Orb Starter Kit](https://github.com/CircleCI-Public/orb-starter-kit#orb-starter-kit--).
