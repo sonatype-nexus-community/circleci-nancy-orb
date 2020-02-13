@@ -195,10 +195,3 @@ workflows:
           ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
           requires:
             - orb-tools/publish-dev
-
-#      - orb-tools/dev-promote-prod:
-#          name: dev-promote-patch
-#          orb-name: sonatype-nexus-community/circleci-nancy-orb
-#          ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
-#          requires:
-#            - approve-release
