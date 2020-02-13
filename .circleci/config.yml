@@ -180,7 +180,7 @@ workflows:
               only: master
           type: approval
 
-      - orb-tools/lint
+      - orb-tools/lint:
           requires:
             - approve-release
       - orb-tools/pack:
