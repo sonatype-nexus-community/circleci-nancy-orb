@@ -13,6 +13,9 @@ orbs:
 my-orb-name: &MY_ORB_NAME
   orb-name: sonatype-nexus-community/circleci-nancy-orb
 
+my-orb-ref: &MY_ORB_REF
+  orb-ref: sonatype-nexus-community/circleci-nancy-orb
+
 # Pipeline parameters
 parameters:
   # These pipeline parameters are required by the "trigger-integration-tests-workflow"
@@ -182,7 +185,7 @@ workflows:
             branches:
               only: master
           attach-workspace: true
-          <<: *MY_ORB_NAME
+          <<: *MY_ORB_REF
           requires:
             - approve-release
 
