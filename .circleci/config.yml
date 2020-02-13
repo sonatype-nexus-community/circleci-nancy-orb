@@ -187,4 +187,4 @@ workflows:
           publish-version-tag: true
           ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
           requires:
-            - orb-tools/publish-dev
+            - approve-release
