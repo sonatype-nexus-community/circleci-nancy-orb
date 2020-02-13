@@ -180,6 +180,16 @@ workflows:
               only: master
           type: approval
 
+      - orb-tools/lint
+          requires:
+            - approve-release
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          <<: *MY_ORB_NAME
+          requires:
+            - orb-tools/pack
       - orb-tools/increment:
           filters:
             branches:
@@ -187,8 +197,7 @@ workflows:
           attach-workspace: true
           <<: *MY_ORB_REF
           requires:
-            - approve-release
-
+            - orb-tools/publish-dev
       - orb-tools/dev-promote-prod-from-commit-subject:
           add-pr-comment: false
           fail-if-semver-not-indicated: false
