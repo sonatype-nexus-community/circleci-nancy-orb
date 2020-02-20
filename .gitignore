@@ -1,7 +1,4 @@
 # ci config for local ci build
 .circleci/local-config.yml
 
-# ci config for local inline ci build
-inline-orb/local-config-inline.yml
-
 .idea
