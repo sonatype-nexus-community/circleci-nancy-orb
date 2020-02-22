@@ -1,6 +1,6 @@
 description: The configuration below will run nancy on your golang project dependencies.
   The default go list command will be used to pipe dependency information to nancy.
-  It assumes a default architecture of linux.amd, nancy version v0.0.41.
+  It assumes a default architecture of linux.amd, nancy version v0.0.42.
 usage:
   version: 2.1
 
