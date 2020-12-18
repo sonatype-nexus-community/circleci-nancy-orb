@@ -103,7 +103,7 @@ jobs:
             mkdir testproject
             cd testproject
             dep init
-            ls -alhR test/non-vulnerable/src/
+            ls -alh
       - circleci-nancy-orb/run-nancy-modfile:
           modfile: test/non-vulnerable/src/Gopkg.lock
 
