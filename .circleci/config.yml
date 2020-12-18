@@ -84,34 +84,33 @@ jobs:
           nancy-platform: darwin.amd64
       - remove-nancy
 
-  job-test-run-modfile:
-    executor: circleci-nancy-orb/golang-executor
-    environment:
-      GOPATH: /home/circleci/project/test/non-vulnerable
-    steps:
-      - run:
-          command: |
-            pwd
-            echo "gopath: $GOPATH"
-            which dep
-            go env
-      - checkout
-      - circleci-nancy-orb/install-nancy
-      - run:
-          command: |
-            cd test/non-vulnerable/src/
-            mkdir testproject
-            cd testproject
-            dep init
-            ls -alh
-            cat Gopkg.lock
-            cat Gopkg.toml
-            ls -alh vendor
-      - circleci-nancy-orb/run-nancy-modfile:
-          environment:
-            GOPATH: /home/circleci/project/test/non-vulnerable
-          #modfile: test/non-vulnerable/src/Gopkg.lock
-          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
+# TODO Fix this integration test to use a path to a Gopkg.lock file with dep
+#  job-test-run-modfile:
+#    executor: circleci-nancy-orb/golang-executor
+#    environment:
+#      GOPATH: /home/circleci/project/test/non-vulnerable
+#    steps:
+#      - run:
+#          command: |
+#            pwd
+#            echo "gopath: $GOPATH"
+#            which dep
+#            go env
+#      - checkout
+#      - circleci-nancy-orb/install-nancy
+#      - run:
+#          command: |
+#            cd test/non-vulnerable/src/
+#            mkdir testproject
+#            cd testproject
+#            dep init
+#            ls -alh
+#            cat Gopkg.lock
+#            cat Gopkg.toml
+#            ls -alh vendor
+#      - circleci-nancy-orb/run-nancy-modfile:
+#          #modfile: test/non-vulnerable/src/Gopkg.lock
+#          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor
@@ -126,13 +125,14 @@ jobs:
       - circleci-nancy-orb/run-nancy:
           options: sleuth --quiet
 
-  job-test-run-modfile-options:
-    executor: circleci-nancy-orb/golang-executor
-    steps:
-      - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy-modfile:
-          options: sleuth --version -p
-          modfile: test/non-vulnerable/src/Gopkg.lock
+# TODO Fix this integration test to use a path to a Gopkg.lock file with dep
+#  job-test-run-modfile-options:
+#    executor: circleci-nancy-orb/golang-executor
+#    steps:
+#      - circleci-nancy-orb/install-nancy
+#      - circleci-nancy-orb/run-nancy-modfile:
+#          options: sleuth --version -p
+#          modfile: test/non-vulnerable/src/Gopkg.lock
 
 workflows:
   lint_pack-validate_publish-dev:
