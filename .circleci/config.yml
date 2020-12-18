@@ -92,7 +92,7 @@ jobs:
       - run:
           command: |
             pwd
-            echo"gopath: $GOPATH"
+            echo "gopath: $GOPATH"
       - checkout
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
