@@ -45,7 +45,7 @@ jobs:
     steps:
       - circleci-nancy-orb/install-nancy
       - run:
-          name: Check install old nancy version
+          name: Check install default nancy version
           command: |
             installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
             echo "installedNancyVersion: $installedNancyVersion"
@@ -87,7 +87,7 @@ jobs:
   job-test-run-modfile:
     executor: circleci-nancy-orb/golang-executor
     environment:
-      GOPATH: test
+      GOPATH: test/non-vulnerable
     steps:
       - run:
           command: |
@@ -96,8 +96,13 @@ jobs:
             which dep
       - checkout
       - circleci-nancy-orb/install-nancy
+      - run:
+          name: Run dep init on test project
+          command: |
+            cd test/non-vulnerable/src
+            dep init
       - circleci-nancy-orb/run-nancy-modfile:
-          modfile: test/non-vulnerable/Gopkg.lock
+          modfile: test/non-vulnerable/src/Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor
