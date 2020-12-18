@@ -87,7 +87,7 @@ jobs:
   job-test-run-modfile:
     executor: circleci-nancy-orb/golang-executor
     environment:
-      GOPATH: test/non-vulnerable
+      GOPATH: /home/circleci/project/test/non-vulnerable
     steps:
       - run:
           command: |
