@@ -103,14 +103,14 @@ jobs:
     steps:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy:
-          options: -quiet
+          options: sleuth --quiet
 
   job-test-run-modfile-options:
     executor: circleci-nancy-orb/golang-executor
     steps:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
-          options: -version
+          options: --version
 
 workflows:
   lint_pack-validate_publish-dev:
