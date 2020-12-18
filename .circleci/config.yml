@@ -119,6 +119,7 @@ jobs:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
           options: sleuth --version -p
+          modfile: test/non-vulnerable/src/Gopkg.lock
 
 workflows:
   lint_pack-validate_publish-dev:
