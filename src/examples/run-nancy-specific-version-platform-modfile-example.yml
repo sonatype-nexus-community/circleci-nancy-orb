@@ -16,7 +16,7 @@ usage:
             nancy-version: v0.0.40
         - circleci-nancy-orb/run-nancy-modfile:
             modfile: my-go.sum
-            option: -quiet
+            option: sleuth -quiet
 
   workflows:
     main:
