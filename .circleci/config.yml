@@ -104,6 +104,9 @@ jobs:
             cd testproject
             dep init
             ls -alh
+            cat Gopkg.lock
+            cat Gopkg.toml
+            ls -alh vendor
       - circleci-nancy-orb/run-nancy-modfile:
           #modfile: test/non-vulnerable/src/Gopkg.lock
           modfile: test/non-vulnerable/src/testproject/Gopkg.lock
