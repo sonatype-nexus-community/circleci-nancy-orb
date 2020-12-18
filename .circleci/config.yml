@@ -25,7 +25,9 @@ parameters:
     default: false
   dev-orb-version:
     type: string
-    default: "dev:alpha"
+    # during active development of this orb, the default version below should be: "dev:alpha"
+    #default: "dev:alpha"
+    default: "0.0.21"
 
 commands:
   remove-nancy:
