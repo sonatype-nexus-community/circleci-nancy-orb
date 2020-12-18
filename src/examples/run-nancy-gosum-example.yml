@@ -1,5 +1,5 @@
 description: The configuration below will run nancy on your golang project dependencies. It assumes a default
-  architecture of linux.amd, nancy version v1.0.2, and a 'go.sum' file in the root of your project.
+  architecture of linux.amd, nancy version v1.0.2, and a 'Gopkg.lock' file in the root of your project.
 usage:
   version: 2.1
 

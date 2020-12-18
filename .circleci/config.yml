@@ -90,7 +90,7 @@ jobs:
       - checkout
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
-          modfile: test/non-vulnerable/go.sum
+          modfile: test/non-vulnerable/Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor

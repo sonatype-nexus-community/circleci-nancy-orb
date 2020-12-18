@@ -1,15 +1,15 @@
 parameters:
   modfile:
     type: string
-    default: go.sum
+    default: Gopkg.lock
     description: >
       The path to the file from which Nancy will read your project dependencies.
-      Typically the path to a file named `go.sum` or `Gopkg.lock`.
+      Typically the path to a file named `Gopkg.lock`.
   options:
     type: string
-    default: "sleuth"
+    default: "sleuth -p"
     description: >
-      Additional options to pass to nancy, for example: -quiet -exclude-vulnerability some_vuln_to_exclude
+      Additional options to pass to nancy, for example: --quiet --exclude-vulnerability some_vuln_to_exclude
       See https://github.com/sonatype-nexus-community/nancy#usage for all valid options.
 steps:
   - run:
