@@ -105,7 +105,8 @@ jobs:
             dep init
             ls -alh
       - circleci-nancy-orb/run-nancy-modfile:
-          modfile: test/non-vulnerable/src/Gopkg.lock
+          #modfile: test/non-vulnerable/src/Gopkg.lock
+          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor
