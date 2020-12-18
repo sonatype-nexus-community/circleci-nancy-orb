@@ -94,6 +94,7 @@ jobs:
             pwd
             echo "gopath: $GOPATH"
             which dep
+            go env
       - checkout
       - circleci-nancy-orb/install-nancy
       - run:
