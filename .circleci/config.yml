@@ -99,7 +99,10 @@ jobs:
       - circleci-nancy-orb/install-nancy
       - run:
           command: |
-            cd test/non-vulnerable/src/ && mkdir testproject && cd testproject && dep init
+            cd test/non-vulnerable/src/
+            mkdir testproject
+            cd testproject
+            dep init
             ls -alhR test/non-vulnerable/src/
       - circleci-nancy-orb/run-nancy-modfile:
           modfile: test/non-vulnerable/src/Gopkg.lock
