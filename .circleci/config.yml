@@ -87,6 +87,7 @@ jobs:
   job-test-run-modfile-go-sum-old-nancy:
     executor: circleci-nancy-orb/golang-executor
     steps:
+      - checkout
       - remove-nancy
       - circleci-nancy-orb/install-nancy:
           nancy-version: v0.0.42
