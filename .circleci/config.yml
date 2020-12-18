@@ -144,13 +144,13 @@ jobs:
           options: -version
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
-#  job-test-run-modfile-options:
-#    executor: circleci-nancy-orb/golang-executor
-#    steps:
-#      - circleci-nancy-orb/install-nancy
-#      - circleci-nancy-orb/run-nancy-modfile:
-#          options: sleuth --version -p
-#          modfile: test/non-vulnerable/src/Gopkg.lock
+  job-test-run-modfile-options:
+    executor: circleci-nancy-orb/golang-executor
+    steps:
+      - circleci-nancy-orb/install-nancy
+      - circleci-nancy-orb/run-nancy-modfile:
+          options: sleuth --version -p
+          modfile: test/non-vulnerable/src/Gopkg.lock
 
 workflows:
   lint_pack-validate_publish-dev:
@@ -197,10 +197,12 @@ workflows:
       - job-test-install-old-nancy
       - job-test-install-platform-windows
       - job-test-install-platform-macos
-      - job-test-run-modfile
+      - job-test-run-modfile-go-sum-old-nancy
+      #- job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
-      - job-test-run-modfile-options
+      - job-test-run-modfile-options-go-sum-old-nancy
+      #- job-test-run-modfile-options
 
   # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
   wf_integration-test:
