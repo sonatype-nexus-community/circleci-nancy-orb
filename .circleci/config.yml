@@ -89,6 +89,9 @@ jobs:
     environment:
       GOPATH: test/non-vulnerable
     steps:
+      - run:
+          command: |
+            pwd
       - checkout
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
