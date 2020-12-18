@@ -108,6 +108,8 @@ jobs:
             cat Gopkg.toml
             ls -alh vendor
       - circleci-nancy-orb/run-nancy-modfile:
+          environment:
+            GOPATH: /home/circleci/project/test/non-vulnerable
           #modfile: test/non-vulnerable/src/Gopkg.lock
           modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
