@@ -112,7 +112,7 @@ jobs:
     steps:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
-          options: --version
+          options: Gopkg.lock --version
 
 workflows:
   lint_pack-validate_publish-dev:
