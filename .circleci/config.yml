@@ -84,16 +84,6 @@ jobs:
           nancy-platform: darwin-amd64
       - remove-nancy
 
-  job-test-run-modfile-go-sum-old-nancy:
-    executor: circleci-nancy-orb/golang-executor
-    steps:
-      - checkout
-      - remove-nancy
-      - circleci-nancy-orb/install-nancy:
-          nancy-version: v1.0.6
-      - circleci-nancy-orb/run-nancy-modfile:
-          modfile: test/non-vulnerable/go.sum
-
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile:
     executor: circleci-nancy-orb/golang-executor
@@ -110,7 +100,8 @@ jobs:
       - circleci-nancy-orb/install-nancy
       - run:
           command: |
-            cd test/non-vulnerable/src/
+            #cd test/non-vulnerable/src/
+            cp test/non-vulnerable/src/Gopkg.* .
       - circleci-nancy-orb/run-nancy-modfile:
           #modfile: test/non-vulnerable/src/Gopkg.lock
           #modfile: test/non-vulnerable/src/testproject/Gopkg.lock
@@ -128,15 +119,6 @@ jobs:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy:
           options: sleuth --quiet
-
-  job-test-run-modfile-options-go-sum-old-nancy:
-    executor: circleci-nancy-orb/golang-executor
-    steps:
-      - remove-nancy
-      - circleci-nancy-orb/install-nancy:
-          nancy-version: v1.0.6
-      - circleci-nancy-orb/run-nancy-modfile:
-          options: --version
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile-options:
@@ -192,11 +174,9 @@ workflows:
       - job-test-install-old-nancy
       - job-test-install-platform-windows
       - job-test-install-platform-macos
-      - job-test-run-modfile-go-sum-old-nancy
       - job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
-      - job-test-run-modfile-options-go-sum-old-nancy
       #- job-test-run-modfile-options
 
   # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
