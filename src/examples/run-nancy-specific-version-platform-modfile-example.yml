@@ -16,7 +16,7 @@ usage:
             nancy-version: v0.0.40
         - circleci-nancy-orb/run-nancy-modfile:
             modfile: my-Gopkg.lock
-            option: sleuth --quiet -p
+            options: sleuth --quiet -p
 
   workflows:
     main:
