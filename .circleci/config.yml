@@ -95,32 +95,26 @@ jobs:
           modfile: test/non-vulnerable/go.sum
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
-#  job-test-run-modfile:
-#    executor: circleci-nancy-orb/golang-executor
-#    environment:
-#      GOPATH: /home/circleci/project/test/non-vulnerable
-#    steps:
-#      - run:
-#          command: |
-#            pwd
-#            echo "gopath: $GOPATH"
-#            which dep
-#            go env
-#      - checkout
-#      - circleci-nancy-orb/install-nancy
-#      - run:
-#          command: |
-#            cd test/non-vulnerable/src/
-#            mkdir testproject
-#            cd testproject
-#            dep init
-#            ls -alh
-#            cat Gopkg.lock
-#            cat Gopkg.toml
-#            ls -alh vendor
-#      - circleci-nancy-orb/run-nancy-modfile:
-#          #modfile: test/non-vulnerable/src/Gopkg.lock
-#          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
+  job-test-run-modfile:
+    executor: circleci-nancy-orb/golang-executor
+    environment:
+      GOPATH: /home/circleci/project/test/non-vulnerable
+    steps:
+      - run:
+          command: |
+            pwd
+            echo "gopath: $GOPATH"
+            which dep
+            go env
+      - checkout
+      - circleci-nancy-orb/install-nancy
+      - run:
+          command: |
+            cd test/non-vulnerable/src/
+      - circleci-nancy-orb/run-nancy-modfile:
+          #modfile: test/non-vulnerable/src/Gopkg.lock
+          #modfile: test/non-vulnerable/src/testproject/Gopkg.lock
+          modfile: Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor
@@ -199,7 +193,7 @@ workflows:
       - job-test-install-platform-windows
       - job-test-install-platform-macos
       - job-test-run-modfile-go-sum-old-nancy
-      #- job-test-run-modfile
+      - job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
       - job-test-run-modfile-options-go-sum-old-nancy
