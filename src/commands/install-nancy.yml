@@ -1,7 +1,7 @@
 parameters:
   nancy-version:
     type: string
-    default: v1.0.2
+    default: v1.0.11
     description: >
       The version of Nancy to run. See: https://github.com/sonatype-nexus-community/nancy/releases for available
       versions.
@@ -17,7 +17,7 @@ steps:
       name: Install Nancy
       command: |
         cd /tmp && mkdir tools && cd -
-        sourceUrl="https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-platform >>-<< parameters.nancy-version >>"
+        sourceUrl="https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-version >>-<< parameters.nancy-platform >>"
         if [[ $sourceUrl == *"windows"* ]]; then
           sourceUrl="${sourceUrl}.exe"
         fi
