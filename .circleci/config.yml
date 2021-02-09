@@ -59,13 +59,13 @@ jobs:
     steps:
       - remove-nancy
       - circleci-nancy-orb/install-nancy:
-          nancy-version: v0.0.17
+          nancy-version: v1.0.6
       - run:
           name: Check install old nancy version
           command: |
             installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
             echo "installedNancyVersion: $installedNancyVersion"
-            if [ "$installedNancyVersion" != "v0.0.17" ]; then
+            if [ "$installedNancyVersion" != "v1.0.6" ]; then
               >&2 echo "Wrong old nancy version output: $installedNancyVersion"
               exit 1
             fi
@@ -74,14 +74,14 @@ jobs:
     executor: circleci-nancy-orb/golang-executor
     steps:
       - circleci-nancy-orb/install-nancy:
-          nancy-platform: windows.amd64
+          nancy-platform: windows-amd64
       - remove-nancy
 
   job-test-install-platform-macos:
     executor: circleci-nancy-orb/golang-executor
     steps:
       - circleci-nancy-orb/install-nancy:
-          nancy-platform: darwin.amd64
+          nancy-platform: darwin-amd64
       - remove-nancy
 
   job-test-run-modfile-go-sum-old-nancy:
@@ -90,7 +90,7 @@ jobs:
       - checkout
       - remove-nancy
       - circleci-nancy-orb/install-nancy:
-          nancy-version: v0.0.42
+          nancy-version: v1.0.6
       - circleci-nancy-orb/run-nancy-modfile:
           modfile: test/non-vulnerable/go.sum
 
@@ -140,7 +140,7 @@ jobs:
     steps:
       - remove-nancy
       - circleci-nancy-orb/install-nancy:
-          nancy-version: v0.0.42
+          nancy-version: v1.0.6
       - circleci-nancy-orb/run-nancy-modfile:
           options: -version
 
