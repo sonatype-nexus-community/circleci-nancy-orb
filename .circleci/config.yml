@@ -142,7 +142,7 @@ jobs:
       - circleci-nancy-orb/install-nancy:
           nancy-version: v1.0.6
       - circleci-nancy-orb/run-nancy-modfile:
-          options: -version
+          options: --version
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile-options:
