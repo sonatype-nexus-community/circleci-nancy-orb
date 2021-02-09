@@ -11,6 +11,7 @@ usage:
     job-nancy:
       executor: circleci-nancy-orb/golang-executor
       steps:
+        - checkout
         - circleci-nancy-orb/install-nancy:
             nancy-platform: windows-amd64
             nancy-version: v1.0.6
