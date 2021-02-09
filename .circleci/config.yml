@@ -103,6 +103,7 @@ jobs:
             #cd test/non-vulnerable/src/
             cp test/non-vulnerable/src/Gopkg.* .
             ls -alh
+            go env
       - circleci-nancy-orb/run-nancy-modfile:
           #modfile: test/non-vulnerable/src/Gopkg.lock
           #modfile: test/non-vulnerable/src/testproject/Gopkg.lock
