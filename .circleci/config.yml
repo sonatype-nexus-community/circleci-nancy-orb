@@ -98,16 +98,8 @@ jobs:
             go env
       - checkout
       - circleci-nancy-orb/install-nancy
-      - run:
-          command: |
-            #cd test/non-vulnerable/src/
-            cp test/non-vulnerable/src/Gopkg.* .
-            ls -alh
-            go env
       - circleci-nancy-orb/run-nancy-modfile:
-          #modfile: test/non-vulnerable/src/Gopkg.lock
-          #modfile: test/non-vulnerable/src/testproject/Gopkg.lock
-          modfile: Gopkg.lock
+          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
   job-test-run-default:
     executor: circleci-nancy-orb/golang-executor
@@ -128,7 +120,7 @@ jobs:
     steps:
       - circleci-nancy-orb/install-nancy
       - circleci-nancy-orb/run-nancy-modfile:
-          options: sleuth --version -p
+          options: sleuth -p
           modfile: test/non-vulnerable/src/Gopkg.lock
 
 workflows:
@@ -176,7 +168,7 @@ workflows:
       - job-test-install-old-nancy
       - job-test-install-platform-windows
       - job-test-install-platform-macos
-      - job-test-run-modfile
+#      - job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
       #- job-test-run-modfile-options
