@@ -65,7 +65,7 @@ jobs:
           command: |
             installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
             echo "installedNancyVersion: $installedNancyVersion"
-            if [ "$installedNancyVersion" != "1.0.6" ]; then
+            if [ "$installedNancyVersion" != "nancy version 1.0.6" ]; then
               >&2 echo "Wrong old nancy version output: $installedNancyVersion"
               exit 1
             fi
