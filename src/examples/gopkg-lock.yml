@@ -1,5 +1,4 @@
-description: The configuration below will run nancy on your golang project dependencies. It assumes a default
-  architecture of linux-amd, nancy version v1.0.11, and a 'Gopkg.lock' file in the root of your project.
+description: Uses the default architecture, default nancy version, and expects a 'Gopkg.lock' file in the root of your project.
 usage:
   version: 2.1
 

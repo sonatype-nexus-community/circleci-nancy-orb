@@ -1,6 +1,5 @@
-description: The configuration below will run nancy on your golang project dependencies. It specifies custom
-  architecture (windows-amd64), nancy version (v1.0.6), and 'my-Gopkg.lock' file module file. It runs nancy with the
-  --quiet option.
+description: Specifies custom architecture (windows-amd64), nancy version (v1.0.6), and 'my-Gopkg.lock' file module file.
+  It also runs nancy with the --quiet option.
 usage:
   version: 2.1
 
