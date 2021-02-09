@@ -17,7 +17,7 @@ Provides a CircleCI Orb to use [nancy](https://github.com/sonatype-nexus-communi
 
 Click the `orb version` badge above for usage examples and documentation.
 
-A project that use the orb is: [nancy-circleci-orb-test](https://github.com/bhamail/nancy-circleci-orb-test)
+An example project that uses this orb is: [nancy-circleci-orb-test](https://github.com/bhamail/nancy-circleci-orb-test)
  
 ### Orb Development Process
 
