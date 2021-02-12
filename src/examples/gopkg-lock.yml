@@ -1,4 +1,4 @@
-description: Uses the default architecture, default nancy version, and expects a 'Gopkg.lock' file in the root of your project.
+description: Uses the default architecture, latest nancy version, and expects a 'Gopkg.lock' file in the root of your project.
 usage:
   version: 2.1
 

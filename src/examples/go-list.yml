@@ -1,5 +1,5 @@
 description: The default go list command will be used to pipe dependency information to nancy.
-  It uses the default architecture and default nancy version.
+  It uses the default architecture and latest nancy version.
 usage:
   version: 2.1
 
