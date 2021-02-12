@@ -49,8 +49,9 @@ jobs:
           command: |
             installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
             echo "installedNancyVersion: $installedNancyVersion"
-            if [ "$installedNancyVersion" != "nancy version 1.0.12" ]; then
-              >&2 echo "Wrong default nancy version output: $installedNancyVersion"
+            latest_version_is=$(curl --fail -s https://api.github.com/repos/sonatype-nexus-community/nancy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+            if [ "$installedNancyVersion" != "$latest_version_is" ]; then
+              >&2 echo "Wrong default nancy version output: $installedNancyVersion, expected: $latest_version_is"
               exit 1
             fi
 
