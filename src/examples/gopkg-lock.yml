@@ -3,15 +3,15 @@ usage:
   version: 2.1
 
   orbs:
-    circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+    nancy: sonatype-nexus-community/circleci-nancy-orb@x.y.z
 
   jobs:
     job-nancy:
-      executor: circleci-nancy-orb/golang-executor
+      executor: nancy/golang-executor
       steps:
         - checkout
-        - circleci-nancy-orb/install-nancy
-        - circleci-nancy-orb/run-nancy-modfile
+        - nancy/install
+        - nancy/run-modfile
 
   workflows:
     main:
