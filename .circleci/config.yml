@@ -50,8 +50,9 @@ jobs:
             installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
             echo "installedNancyVersion: $installedNancyVersion"
             latest_version_suffix=$(curl --fail -s https://api.github.com/repos/sonatype-nexus-community/nancy/releases/latest | grep -oP '"tag_name": "v\K(.*)(?=")')
-            if [ "$installedNancyVersion" != "$latest_version_suffix" ]; then
-              >&2 echo "Wrong default nancy version output: $installedNancyVersion, expected: $latest_version_suffix"
+            expectedVersionMsg="nancy version $latest_version_suffix"
+            if [ "$installedNancyVersion" != "$expectedVersionMsg" ]; then
+              >&2 echo "Wrong default nancy version output: $installedNancyVersion, expected: $expectedVersionMsg"
               exit 1
             fi
 
