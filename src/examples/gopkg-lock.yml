@@ -10,7 +10,7 @@ usage:
       executor: nancy/golang-executor
       steps:
         - checkout
-        - nancy/install
+        - nancy/install-nancy
         - nancy/run-modfile
 
   workflows:

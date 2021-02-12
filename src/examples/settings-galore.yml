@@ -11,7 +11,7 @@ usage:
       executor: nancy/golang-executor
       steps:
         - checkout
-        - nancy/install:
+        - nancy/install-nancy:
             nancy-platform: windows-amd64
             nancy-version: v1.0.6
         - nancy/run-modfile:

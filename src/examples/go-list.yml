@@ -11,8 +11,8 @@ usage:
       executor: nancy/golang-executor
       steps:
         - checkout
-        - nancy/install
-        - nancy/run
+        - nancy/install-nancy
+        - nancy/run-nancy
 
   workflows:
     main:

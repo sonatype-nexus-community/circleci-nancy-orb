@@ -43,7 +43,7 @@ jobs:
   job-test-install-default-nancy:
     executor: nancy/golang-executor
     steps:
-      - nancy/install
+      - nancy/install-nancy
       - run:
           name: Check install default nancy version
           command: |
@@ -60,7 +60,7 @@ jobs:
     executor: nancy/golang-executor
     steps:
       - remove-nancy
-      - nancy/install:
+      - nancy/install-nancy:
           nancy-version: v1.0.6
       - run:
           name: Check install old nancy version
@@ -75,14 +75,14 @@ jobs:
   job-test-install-platform-windows:
     executor: nancy/golang-executor
     steps:
-      - nancy/install:
+      - nancy/install-nancy:
           nancy-platform: windows-amd64
       - remove-nancy
 
   job-test-install-platform-macos:
     executor: nancy/golang-executor
     steps:
-      - nancy/install:
+      - nancy/install-nancy:
           nancy-platform: darwin-amd64
       - remove-nancy
 
@@ -99,28 +99,28 @@ jobs:
             which dep
             go env
       - checkout
-      - nancy/install
+      - nancy/install-nancy
       - nancy/run-modfile:
           modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
   job-test-run-default:
     executor: nancy/golang-executor
     steps:
-      - nancy/install
-      - nancy/run
+      - nancy/install-nancy
+      - nancy/run-nancy
 
   job-test-run-options:
     executor: nancy/golang-executor
     steps:
-      - nancy/install
-      - nancy/run:
+      - nancy/install-nancy
+      - nancy/run-nancy:
           options: sleuth --quiet
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile-options:
     executor: nancy/golang-executor
     steps:
-      - nancy/install
+      - nancy/install-nancy
       - nancy/run-modfile:
           options: sleuth -p
           modfile: test/non-vulnerable/src/Gopkg.lock
