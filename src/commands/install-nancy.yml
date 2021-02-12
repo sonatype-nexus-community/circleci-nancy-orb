@@ -24,6 +24,7 @@ steps:
         fi
         sourceUrl="https://github.com/sonatype-nexus-community/nancy/releases/download/${desiredVersion}/nancy-${desiredVersion}-<< parameters.nancy-platform >>"
         if [[ $sourceUrl == *"windows"* ]]; then
+          echo "Pre sourceUrl: ${sourceUrl}"
           sourceUrl="${sourceUrl}.exe"
         fi
         echo "installing nancy via ${sourceUrl}"
