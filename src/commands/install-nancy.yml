@@ -17,9 +17,15 @@ steps:
       name: Install Nancy
       command: |
         cd /tmp && mkdir tools && cd -
-        sourceUrl="https://github.com/sonatype-nexus-community/nancy/releases/download/<< parameters.nancy-version >>/nancy-<< parameters.nancy-version >>-<< parameters.nancy-platform >>"
+        desiredVersion="<< parameters.nancy-version >>"
+        if [[ ${desiredVersion} == "latest" ]]; then
+          latest_version_is=$(curl --fail -s https://api.github.com/repos/sonatype-nexus-community/nancy/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+          desiredVersion=${latest_version_is}
+        fi
+        sourceUrl="https://github.com/sonatype-nexus-community/nancy/releases/download/${desiredVersion}/nancy-${desiredVersion}-<< parameters.nancy-platform >>"
         if [[ $sourceUrl == *"windows"* ]]; then
           sourceUrl="${sourceUrl}.exe"
         fi
+        echo "installing nancy via ${sourceUrl}"
         curl --fail -s -L "$sourceUrl" -o "/tmp/tools/nancy"
         chmod +x /tmp/tools/nancy
