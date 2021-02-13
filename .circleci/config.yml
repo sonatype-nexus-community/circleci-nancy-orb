@@ -124,10 +124,10 @@ jobs:
       - nancy/install-nancy
       - nancy/run-nancy
 
-  job-test-run-executor-tag-1-14:
+  job-test-run-executor-tag-1-13:
     executor:
       name: nancy/golang-executor
-      tag: "1.14"
+      tag: "1.13"
     steps:
       - nancy/install-nancy
       - nancy/run-nancy
@@ -190,7 +190,7 @@ workflows:
       - job-test-run-default
       - job-test-run-options
       - job-test-run-executor-tag-1-12
-      - job-test-run-executor-tag-1-14
+      - job-test-run-executor-tag-1-13
       #- job-test-run-modfile-options
 
   # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
