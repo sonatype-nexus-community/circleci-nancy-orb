@@ -1,12 +1,11 @@
 description: "CircleCI provided docker image with Golang installed. see: https://hub.docker.com/r/circleci/golang/"
-docker:
-  - image: circleci/golang:<<parameters.tag>>
-    environment:
-      - GO111MODULE=on
 parameters:
   tag:
     description: |
       The version of golang to use. See https://hub.docker.com/r/circleci/golang/ for available versions.
     type: string
     default: "1.13"
-
+docker:
+  - image: circleci/golang:<< parameters.tag >>
+    environment:
+      - GO111MODULE=on

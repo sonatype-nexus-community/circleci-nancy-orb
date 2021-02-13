@@ -9,9 +9,8 @@ usage:
   jobs:
     job-nancy:
       executor:
-        - nancy/golang-executor:
-            tag: 1.14
-
+        name: nancy/golang-executor
+          tag: 1.14
       steps:
         - checkout
         - nancy/install-nancy:
