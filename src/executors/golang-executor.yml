@@ -8,4 +8,4 @@ parameters:
 docker:
   - image: circleci/golang:<< parameters.tag >>
     environment:
-      - GO111MODULE=on
+      GO111MODULE: on

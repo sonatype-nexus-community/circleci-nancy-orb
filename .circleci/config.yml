@@ -116,6 +116,22 @@ jobs:
       - nancy/run-nancy:
           options: sleuth --quiet
 
+  job-test-run-executor-tag-1-12:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.12"
+    steps:
+      - nancy/install-nancy
+      - nancy/run-nancy
+
+  job-test-run-executor-tag-1-14:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.12"
+    steps:
+      - nancy/install-nancy
+      - nancy/run-nancy
+
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile-options:
     executor: nancy/golang-executor
@@ -173,6 +189,8 @@ workflows:
       #- job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
+      - job-test-run-executor-tag-1-12
+      - job-test-run-executor-tag-1-14
       #- job-test-run-modfile-options
 
   # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
