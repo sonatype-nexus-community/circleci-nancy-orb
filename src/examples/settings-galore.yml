@@ -1,5 +1,5 @@
 description: Specifies custom architecture (windows-amd64), nancy version (v1.0.6), and 'my-Gopkg.lock' file module file.
-  It also runs nancy with the --quiet option.
+  It runs nancy with the --quiet option and uses an executor with a golang container with tag 1.14
 usage:
   version: 2.1
 
@@ -8,7 +8,10 @@ usage:
 
   jobs:
     job-nancy:
-      executor: nancy/golang-executor
+      executor:
+        - nancy/golang-executor:
+            tag: 1.14
+
       steps:
         - checkout
         - nancy/install-nancy:
