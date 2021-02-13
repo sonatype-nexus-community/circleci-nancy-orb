@@ -127,7 +127,7 @@ jobs:
   job-test-run-executor-tag-1-14:
     executor:
       name: nancy/golang-executor
-      tag: "1.12"
+      tag: "1.14"
     steps:
       - nancy/install-nancy
       - nancy/run-nancy
