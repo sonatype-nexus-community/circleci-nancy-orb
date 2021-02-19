@@ -8,7 +8,7 @@
 version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@10
-  circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@<<pipeline.parameters.dev-orb-version>>
+  nancy: sonatype-nexus-community/circleci-nancy-orb@<<pipeline.parameters.dev-orb-version>>
 
 my-orb-name: &MY_ORB_NAME
   orb-name: sonatype-nexus-community/circleci-nancy-orb
@@ -41,9 +41,9 @@ commands:
 
 jobs:
   job-test-install-default-nancy:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy
+      - nancy/install-nancy
       - run:
           name: Check install default nancy version
           command: |
@@ -57,10 +57,10 @@ jobs:
             fi
 
   job-test-install-old-nancy:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
       - remove-nancy
-      - circleci-nancy-orb/install-nancy:
+      - nancy/install-nancy:
           nancy-version: v1.0.6
       - run:
           name: Check install old nancy version
@@ -73,22 +73,22 @@ jobs:
             fi
 
   job-test-install-platform-windows:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy:
+      - nancy/install-nancy:
           nancy-platform: windows-amd64
       - remove-nancy
 
   job-test-install-platform-macos:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy:
+      - nancy/install-nancy:
           nancy-platform: darwin-amd64
       - remove-nancy
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     environment:
       GOPATH: /home/circleci/project/test/non-vulnerable
     steps:
@@ -99,29 +99,45 @@ jobs:
             which dep
             go env
       - checkout
-      - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy-modfile:
+      - nancy/install-nancy
+      - nancy/run-modfile:
           modfile: test/non-vulnerable/src/testproject/Gopkg.lock
 
   job-test-run-default:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy
+      - nancy/install-nancy
+      - nancy/run-nancy
 
   job-test-run-options:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy:
+      - nancy/install-nancy
+      - nancy/run-nancy:
           options: sleuth --quiet
+
+  job-test-run-executor-tag-1-12:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.12"
+    steps:
+      - nancy/install-nancy
+      - nancy/run-nancy
+
+  job-test-run-executor-tag-1-13:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.13"
+    steps:
+      - nancy/install-nancy
+      - nancy/run-nancy
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
   job-test-run-modfile-options:
-    executor: circleci-nancy-orb/golang-executor
+    executor: nancy/golang-executor
     steps:
-      - circleci-nancy-orb/install-nancy
-      - circleci-nancy-orb/run-nancy-modfile:
+      - nancy/install-nancy
+      - nancy/run-modfile:
           options: sleuth -p
           modfile: test/non-vulnerable/src/Gopkg.lock
 
@@ -173,6 +189,8 @@ workflows:
       #- job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
+      - job-test-run-executor-tag-1-12
+      - job-test-run-executor-tag-1-13
       #- job-test-run-modfile-options
 
   # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.

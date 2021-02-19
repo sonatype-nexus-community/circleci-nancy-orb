@@ -1,3 +1,5 @@
+description: >
+  Install the Nancy binary for your operating system.
 parameters:
   nancy-version:
     type: string
