@@ -4,7 +4,8 @@ usage:
   version: 2.1
 
   orbs:
-    nancy: sonatype-nexus-community/circleci-nancy-orb@x.y.z
+#    use latest version of Nancy Orb
+    nancy: sonatype-nexus-community/circleci-nancy-orb@0
 
   jobs:
     job-nancy:
