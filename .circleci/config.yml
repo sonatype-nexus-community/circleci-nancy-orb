@@ -210,7 +210,7 @@ workflows:
       - approve-release:
           filters:
             branches:
-              only: master
+              only: main
           type: approval
 
       - orb-tools/lint:
@@ -226,7 +226,7 @@ workflows:
       - orb-tools/increment:
           filters:
             branches:
-              only: master
+              only: main
           attach-workspace: true
           <<: *MY_ORB_REF
           requires:
@@ -236,7 +236,7 @@ workflows:
           fail-if-semver-not-indicated: false
           filters:
             branches:
-              only: master
+              only: main
           <<: *MY_ORB_NAME
           publish-version-tag: true
           ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
