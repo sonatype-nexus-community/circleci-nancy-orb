@@ -1,4 +1,4 @@
-description: Create a custom command to run nancy in your go build.
+description: Create a custom command to run nancy in your go build. Be sure your executor can run `go list ...`.
 usage:
   version: 2.1
 
