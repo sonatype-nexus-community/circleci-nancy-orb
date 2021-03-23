@@ -13,9 +13,19 @@ usage:
         - nancy/install-nancy
         - nancy/run-nancy
 
+  executors:
+    go:
+      docker:
+        - image: circleci/golang:1.16
+
+  build:
+    executor: go
+    steps:
+      - checkout
+      - run: "echo 'running regular build stuff here'"
+      - cmd-nancy
+
   workflows:
     main:
       jobs:
-        - checkout
-        - run: make all
-        - cmd-nancy
+        - build
