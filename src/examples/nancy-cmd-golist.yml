@@ -1,0 +1,32 @@
+description: Create a custom `go list` command to run nancy in your go build. Be sure your executor can run `go list ...`.
+usage:
+  version: 2.1
+
+  orbs:
+#    use latest version of Nancy Orb
+    nancy: sonatype-nexus-community/circleci-nancy-orb@0
+
+  commands:
+    cmd-nancy:
+      description: "Run nancy to check for go vulnerabilities."
+      steps:
+        - nancy/install-nancy
+        - nancy/run-nancy:
+            golistcommand: go list -json -deps
+
+  executors:
+    go:
+      docker:
+        - image: circleci/golang:1.16
+
+  build:
+    executor: go
+    steps:
+      - checkout
+      - run: "echo 'running regular build stuff here'"
+      - cmd-nancy
+
+  workflows:
+    main:
+      jobs:
+        - build

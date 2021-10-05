@@ -27,7 +27,7 @@ parameters:
     type: string
     # during active development of this orb, the default version below should be: "dev:alpha"
     default: "dev:alpha"
-    #default: "0.0.21"
+    #default: "0.0.32"
 
 commands:
   remove-nancy:

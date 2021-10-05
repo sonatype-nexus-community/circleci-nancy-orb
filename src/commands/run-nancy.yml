@@ -1,7 +1,7 @@
 parameters:
   golistcommand:
     type: string
-    default: go list -json -m all
+    default: go list -json -deps
     description: >
       The go list command who's output will be piped to Nancy to read your project dependencies.
   options:
