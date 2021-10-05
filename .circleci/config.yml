@@ -30,6 +30,15 @@ parameters:
     #default: "0.0.32"
 
 commands:
+  setup-test-gomod-and-gosource-files:
+    steps:
+      # as of go 1.16, we need a 'go.mod' and a '*.go' source file in order for 'go list ...' to work
+      - checkout:
+          path: "tmp-checkout"
+      - run: |
+          cp tmp-checkout/test/module/* .
+          rm -rf tmp-checkout
+
   remove-nancy:
     steps:
       - run:
@@ -105,10 +114,9 @@ jobs:
 
   job-test-run-default:
     executor: nancy/golang-executor
-    environment:
-      GO111MODULE: off
     steps:
       - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
       - nancy/run-nancy
 
   job-test-run-options:
