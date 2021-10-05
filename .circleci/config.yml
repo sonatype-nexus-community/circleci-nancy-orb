@@ -123,6 +123,7 @@ jobs:
     executor: nancy/golang-executor
     steps:
       - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
       - nancy/run-nancy:
           options: sleuth --quiet
 
@@ -132,6 +133,7 @@ jobs:
       tag: "1.12"
     steps:
       - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
       - nancy/run-nancy
 
   job-test-run-executor-tag-1-13:
@@ -140,6 +142,7 @@ jobs:
       tag: "1.13"
     steps:
       - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
       - nancy/run-nancy
 
 # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
