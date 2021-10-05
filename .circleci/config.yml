@@ -127,6 +127,14 @@ jobs:
       - nancy/run-nancy:
           options: sleuth --quiet
 
+  job-test-run-golist:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy:
+          golistcommand: go list -json -m all
+
   job-test-run-executor-tag-1-12:
     executor:
       name: nancy/golang-executor
@@ -202,6 +210,7 @@ workflows:
       #- job-test-run-modfile
       - job-test-run-default
       - job-test-run-options
+      - job-test-run-golist
       - job-test-run-executor-tag-1-12
       - job-test-run-executor-tag-1-13
       #- job-test-run-modfile-options
