@@ -6,6 +6,6 @@ parameters:
     type: string
     default: "1.16"
 docker:
-  - image: circleci/golang:<< parameters.tag >>
+  - image: cimg/go:<< parameters.tag >>
     environment:
       GO111MODULE: on
