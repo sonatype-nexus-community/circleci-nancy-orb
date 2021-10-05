@@ -18,14 +18,15 @@ usage:
       docker:
         - image: circleci/golang:1.16
 
-  build:
-    executor: go
-    steps:
-      - checkout
-      - run: "echo 'running regular build stuff here'"
-      - cmd-nancy
+  jobs:
+    job-nancy:
+      executor: go
+      steps:
+        - checkout
+        - run: "echo 'running regular build stuff here'"
+        - cmd-nancy
 
   workflows:
     main:
       jobs:
-        - build
+        - job-nancy
