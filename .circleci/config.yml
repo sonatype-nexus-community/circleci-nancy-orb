@@ -105,6 +105,8 @@ jobs:
 
   job-test-run-default:
     executor: nancy/golang-executor
+    environment:
+      GO111MODULE: off
     steps:
       - nancy/install-nancy
       - nancy/run-nancy
