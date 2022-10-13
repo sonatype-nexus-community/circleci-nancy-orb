@@ -1,0 +1,148 @@
+version: 2.1
+orbs:
+  circleci-nancy-orb: sonatype-nexus-community/circleci-nancy-orb@dev:<<pipeline.git.revision>>
+  orb-tools: circleci/orb-tools@11.1
+filters: &filters
+  tags:
+    only: /.*/
+jobs:
+  job-test-install-default-nancy:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - run:
+          name: Check install default nancy version
+          command: |
+            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
+            echo "installedNancyVersion: $installedNancyVersion"
+            latest_version_suffix=$(curl --fail -s https://api.github.com/repos/sonatype-nexus-community/nancy/releases/latest | grep -oP '"tag_name": "v\K(.*)(?=")')
+            expectedVersionMsg="nancy version $latest_version_suffix"
+            if [ "$installedNancyVersion" != "$expectedVersionMsg" ]; then
+              >&2 echo "Wrong default nancy version output: $installedNancyVersion, expected: $expectedVersionMsg"
+              exit 1
+            fi
+  job-test-install-old-nancy:
+    executor: nancy/golang-executor
+    steps:
+      - remove-nancy
+      - nancy/install-nancy:
+          nancy-version: v1.0.6
+      - run:
+          name: Check install old nancy version
+          command: |
+            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
+            echo "installedNancyVersion: $installedNancyVersion"
+            if [ "$installedNancyVersion" != "nancy version 1.0.6" ]; then
+              >&2 echo "Wrong old nancy version output: $installedNancyVersion"
+              exit 1
+            fi
+  job-test-install-platform-windows:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy:
+          nancy-platform: windows-amd64
+      - remove-nancy
+  job-test-install-platform-macos:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy:
+          nancy-platform: darwin-amd64
+      - remove-nancy
+      # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
+  job-test-run-modfile:
+    executor: nancy/golang-executor
+    environment:
+      GOPATH: /home/circleci/project/test/non-vulnerable
+    steps:
+      - run:
+          command: |
+            pwd
+            echo "gopath: $GOPATH"
+            which dep
+            go env
+      - checkout
+      - nancy/install-nancy
+      - nancy/run-modfile:
+          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
+  job-test-run-default:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy
+  job-test-run-options:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy:
+          options: sleuth --quiet
+  job-test-run-golist:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy:
+          golistcommand: go list -json -m all
+  job-test-run-executor-tag-1-12:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.12"
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy
+  job-test-run-executor-tag-1-13:
+    executor:
+      name: nancy/golang-executor
+      tag: "1.13"
+    steps:
+      - nancy/install-nancy
+      - setup-test-gomod-and-gosource-files
+      - nancy/run-nancy
+      # TODO Fix this integration test to use a path to a Gopkg.lock file with dep
+  job-test-run-modfile-options:
+    executor: nancy/golang-executor
+    steps:
+      - nancy/install-nancy
+      - nancy/run-modfile:
+          options: sleuth -p
+          modfile: test/non-vulnerable/src/Gopkg.lock
+workflows:
+  test-deploy:
+    jobs:
+      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
+      - command-tests:
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: sonatype-nexus-community/circleci-nancy-orb
+          vcs-type: << pipeline.project.type >>
+          pub-type: production
+          requires:
+            - orb-tools/pack
+            - command-tests
+          context: orb-publish
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+commands:
+  setup-test-gomod-and-gosource-files:
+    steps:
+      # as of go 1.16, we need a 'go.mod' and a '*.go' source file in order for 'go list ...' to work
+      - checkout:
+          path: "tmp-checkout"
+      - run: |
+          cp tmp-checkout/test/module/* .
+          rm -rf tmp-checkout
+  remove-nancy:
+    steps:
+      - run:
+          command: |-
+            if [ -f "/tmp/tools/nancy" ]; then
+              rm /tmp/tools/nancy
+              echo "Removed nancy"
+            fi

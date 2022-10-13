@@ -1,266 +1,35 @@
-#  Sonatype Nexus (TM) Open Source Version
-#  Copyright (c) 2020-present Sonatype, Inc.
-#  All rights reserved. Includes the third-party code listed at http://links.sonatype.com/products/nexus/oss/attributions.
-#
-#  Sonatype Nexus (TM) Professional Version is available from Sonatype, Inc. "Sonatype" and "Sonatype Nexus" are trademarks
-#  of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
-#  Eclipse Foundation. All other trademarks are the property of their respective owners.
 version: 2.1
+setup: true
 orbs:
-  orb-tools: circleci/orb-tools@10
-  nancy: sonatype-nexus-community/circleci-nancy-orb@<<pipeline.parameters.dev-orb-version>>
+  orb-tools: circleci/orb-tools@11.1
+  shellcheck: circleci/shellcheck@3.1
 
-my-orb-name: &MY_ORB_NAME
-  orb-name: sonatype-nexus-community/circleci-nancy-orb
-
-my-orb-ref: &MY_ORB_REF
-  orb-ref: sonatype-nexus-community/circleci-nancy-orb
-
-# Pipeline parameters
-parameters:
-  # These pipeline parameters are required by the "trigger-integration-tests-workflow"
-  # job, by default.
-  run-integration-tests:
-    type: boolean
-    default: false
-  dev-orb-version:
-    type: string
-    # during active development of this orb, the default version below should be: "dev:alpha"
-    default: "dev:alpha"
-#    default: "0.0.36"
-
-commands:
-  setup-test-gomod-and-gosource-files:
-    steps:
-      # as of go 1.16, we need a 'go.mod' and a '*.go' source file in order for 'go list ...' to work
-      - checkout:
-          path: "tmp-checkout"
-      - run: |
-          cp tmp-checkout/test/module/* .
-          rm -rf tmp-checkout
-
-  remove-nancy:
-    steps:
-      - run:
-          command: |
-            if [ -f "/tmp/tools/nancy" ]; then
-              rm /tmp/tools/nancy
-              echo "Removed nancy"
-            fi
-
-jobs:
-  job-test-install-default-nancy:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy
-      - run:
-          name: Check install default nancy version
-          command: |
-            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
-            echo "installedNancyVersion: $installedNancyVersion"
-            latest_version_suffix=$(curl --fail -s https://api.github.com/repos/sonatype-nexus-community/nancy/releases/latest | grep -oP '"tag_name": "v\K(.*)(?=")')
-            expectedVersionMsg="nancy version $latest_version_suffix"
-            if [ "$installedNancyVersion" != "$expectedVersionMsg" ]; then
-              >&2 echo "Wrong default nancy version output: $installedNancyVersion, expected: $expectedVersionMsg"
-              exit 1
-            fi
-
-  job-test-install-old-nancy:
-    executor: nancy/golang-executor
-    steps:
-      - remove-nancy
-      - nancy/install-nancy:
-          nancy-version: v1.0.6
-      - run:
-          name: Check install old nancy version
-          command: |
-            installedNancyVersion=$(/tmp/tools/nancy --version | head -n 1)
-            echo "installedNancyVersion: $installedNancyVersion"
-            if [ "$installedNancyVersion" != "nancy version 1.0.6" ]; then
-              >&2 echo "Wrong old nancy version output: $installedNancyVersion"
-              exit 1
-            fi
-
-  job-test-install-platform-windows:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy:
-          nancy-platform: windows-amd64
-      - remove-nancy
-
-  job-test-install-platform-macos:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy:
-          nancy-platform: darwin-amd64
-      - remove-nancy
-
-# TODO Fix this integration test to use a path to a Gopkg.lock file with dep
-  job-test-run-modfile:
-    executor: nancy/golang-executor
-    environment:
-      GOPATH: /home/circleci/project/test/non-vulnerable
-    steps:
-      - run:
-          command: |
-            pwd
-            echo "gopath: $GOPATH"
-            which dep
-            go env
-      - checkout
-      - nancy/install-nancy
-      - nancy/run-modfile:
-          modfile: test/non-vulnerable/src/testproject/Gopkg.lock
-
-  job-test-run-default:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy
-      - setup-test-gomod-and-gosource-files
-      - nancy/run-nancy
-
-  job-test-run-options:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy
-      - setup-test-gomod-and-gosource-files
-      - nancy/run-nancy:
-          options: sleuth --quiet
-
-  job-test-run-golist:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy
-      - setup-test-gomod-and-gosource-files
-      - nancy/run-nancy:
-          golistcommand: go list -json -m all
-
-  job-test-run-executor-tag-1-12:
-    executor:
-      name: nancy/golang-executor
-      tag: "1.12"
-    steps:
-      - nancy/install-nancy
-      - setup-test-gomod-and-gosource-files
-      - nancy/run-nancy
-
-  job-test-run-executor-tag-1-13:
-    executor:
-      name: nancy/golang-executor
-      tag: "1.13"
-    steps:
-      - nancy/install-nancy
-      - setup-test-gomod-and-gosource-files
-      - nancy/run-nancy
-
-# TODO Fix this integration test to use a path to a Gopkg.lock file with dep
-  job-test-run-modfile-options:
-    executor: nancy/golang-executor
-    steps:
-      - nancy/install-nancy
-      - nancy/run-modfile:
-          options: sleuth -p
-          modfile: test/non-vulnerable/src/Gopkg.lock
+filters: &filters
+  tags:
+    only: /.*/
 
 workflows:
-  lint_pack-validate_publish-dev:
-    unless: << pipeline.parameters.run-integration-tests >>
+  lint-pack:
     jobs:
-      # this `lint-pack_validate_publish-dev` workflow will run on any commit
-      - orb-tools/lint
-
-      # pack your orb YAML files to a single orb.yml
-      # validate the orb.yml file to ensure it is well-formed
-      - orb-tools/pack:
-          requires:
-            - orb-tools/lint
-
-      # release dev version of orb, for testing & possible publishing
-      # requires a CircleCI API token to be stored as CIRCLE_TOKEN (default)
-      # https://circleci.com/docs/2.0/managing-api-tokens
-      # store CIRCLE_TOKEN as a project env var or Contexts resource
-      # if using Contexts, add your context below
-      - orb-tools/publish-dev:
-          <<: *MY_ORB_NAME
-          requires:
-            - orb-tools/pack
-
-      # trigger an integration workflow to test the
-      # dev:${CIRCLE_SHA1:0:7} version of your orb
-      - orb-tools/trigger-integration-tests-workflow:
-          name: trigger-integration-dev
-          requires:
-            - orb-tools/publish-dev
-
-  # This `integration-tests` workflow will only run
-  # when the run-integration-tests pipeline parameter is set to true.
-  # It is meant to be triggered by the "trigger-integration-tests-workflow"
-  # job, and run tests on <your orb>@dev:${CIRCLE_SHA1:0:7}.
-  integration-tests:
-    when: << pipeline.parameters.run-integration-tests >>
-    jobs:
-      # integration tests
-      # NOTE: When the Orb parameters change drastically, you may need to temporarily comment out this IT section to
-      # allow the build to republish the new dev Orb. After a CI run completes with this IT section, you can restore
-      # this IT section. Another approach may be to manually republish the dev Orb from you local machine when needed.
-      - job-test-install-default-nancy
-      - job-test-install-old-nancy
-      - job-test-install-platform-windows
-      - job-test-install-platform-macos
-      #- job-test-run-modfile
-      - job-test-run-default
-      - job-test-run-options
-      - job-test-run-golist
-      - job-test-run-executor-tag-1-12
-      - job-test-run-executor-tag-1-13
-      #- job-test-run-modfile-options
-
-  # This workflow exists only to simplify running local IT builds, therefore it need never run on the CI server.
-  wf_integration-test:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              ignore: /.*/
-    jobs:
-      # change the line below to run the IT job of your choice
-      - job-test-run-default
-
-  promote-patch:
-    jobs:
-      - approve-release:
-          filters:
-            branches:
-              only: main
-          type: approval
-
       - orb-tools/lint:
-          requires:
-            - approve-release
+          filters: *filters
       - orb-tools/pack:
+          filters: *filters
+      - orb-tools/review:
+          filters: *filters
+      - shellcheck/check:
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: sonatype-nexus-community/circleci-nancy-orb
+          vcs-type: << pipeline.project.type >>
           requires:
-            - orb-tools/lint
-      - orb-tools/publish-dev:
-          <<: *MY_ORB_NAME
-          requires:
-            - orb-tools/pack
-      - orb-tools/increment:
-          filters:
-            branches:
-              only: main
-          attach-workspace: true
-          <<: *MY_ORB_REF
-          requires:
-            - orb-tools/publish-dev
-      - orb-tools/dev-promote-prod-from-commit-subject:
-          add-pr-comment: false
-          fail-if-semver-not-indicated: false
-          filters:
-            branches:
-              only: main
-          <<: *MY_ORB_NAME
-          publish-version-tag: true
-          ssh-fingerprints: "d9:52:33:98:cd:80:5c:18:42:5e:fa:62:91:aa:55:2c"
-          requires:
-            - orb-tools/increment
+            [orb-tools/lint, orb-tools/review, orb-tools/pack, shellcheck/check]
+          # Use a context to hold your publishing token.
+          context: orb-publish
+          filters: *filters
+      # Triggers the next workflow in the Orb Development Kit.
+      - orb-tools/continue:
+          pipeline-number: << pipeline.number >>
+          vcs-type: << pipeline.project.type >>
+          requires: [orb-tools/publish]
+          filters: *filters
