@@ -42,8 +42,8 @@ The local build runs in a docker container.
   * If the `dev` version of the orb expires, you can get a new one published via:
 
     ```
-    circleci orb pack src/
-    circleci orb publish ./orb.yml sonatype-nexus-community/circleci-nancy-orb@dev:alpha
+    circleci orb pack src/ | circleci orb validate -
+    circleci orb pack src/ | circleci orb publish - sonatype-nexus-community/circleci-nancy-orb@dev:alpha
     ```  
 
 Miscellaneous
